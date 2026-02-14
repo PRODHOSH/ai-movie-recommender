@@ -15,60 +15,31 @@ export default function FavoritesPage() {
   }
 
   return (
-    <div className="space-y-10">
-      {/* Header */}
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="space-y-4"
-      >
-        <div className="flex items-center gap-4">
-          <div className="p-3 rounded-xl bg-gradient-to-br from-red-500/20 to-pink-500/20 border border-red-500/30">
-            <Heart className="w-6 h-6 text-red-500 fill-red-500" />
-          </div>
-          <div>
-            <h1 className="text-4xl md:text-5xl font-display font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60">
-              Your Collection
-            </h1>
-            <div className="flex items-center gap-2 mt-1">
-              <p className="text-muted-foreground">
-                Movies you've saved for later
-              </p>
-              <span className="px-3 py-1 rounded-full bg-gradient-to-r from-primary/20 to-purple-500/20 border border-primary/30 text-sm font-bold text-primary">
-                {favorites?.length || 0} {favorites?.length === 1 ? 'movie' : 'movies'}
-              </span>
-            </div>
-          </div>
-        </div>
-      </motion.div>
+    <div className="space-y-6">
+      <div className="flex items-center gap-3">
+        <Heart className="w-6 h-6 text-primary fill-primary" />
+        <h1 className="text-3xl font-display font-bold text-white">Your Favorites</h1>
+        <span className="px-3 py-1 rounded-full bg-primary/10 text-sm font-medium text-primary border border-primary/20">
+          {favorites?.length || 0}
+        </span>
+      </div>
 
       {!favorites || favorites.length === 0 ? (
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="text-center py-28 bg-gradient-to-br from-card/50 to-card/30 rounded-3xl border-2 border-dashed border-white/10 backdrop-blur-sm"
-        >
-          <div className="relative inline-block mb-6">
-            <div className="absolute inset-0 bg-red-500/20 blur-2xl rounded-full" />
-            <div className="relative w-20 h-20 bg-gradient-to-br from-red-500/20 to-pink-500/20 rounded-full flex items-center justify-center mx-auto border border-red-500/30">
-              <Heart className="w-10 h-10 text-red-500" />
-            </div>
-          </div>
-          <h2 className="text-2xl font-bold mb-2 text-white">No favorites yet</h2>
-          <p className="text-lg text-muted-foreground max-w-md mx-auto">
-            Start exploring and save movies you love to build your personal collection!
+        <div className="text-center py-32 bg-card rounded-xl border border-white/5">
+          <Heart className="w-12 h-12 text-muted-foreground mx-auto mb-4 opacity-50" />
+          <h2 className="text-xl font-semibold mb-2 text-white">No favorites yet</h2>
+          <p className="text-muted-foreground">
+            Start saving movies you love!
           </p>
-        </motion.div>
+        </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {favorites.map((fav, idx) => (
             <motion.div
               key={fav.id}
-              initial={{ opacity: 0, scale: 0.8 }}
+              initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: idx * 0.05, duration: 0.4 }}
+              transition={{ delay: idx * 0.05 }}
             >
               <MovieCard movie={fav.movie} delay={0} />
             </motion.div>
