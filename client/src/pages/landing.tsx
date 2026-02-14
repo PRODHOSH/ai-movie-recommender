@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
 import { useTrendingMovies } from "@/hooks/use-movies";
 import { MovieCard } from "@/components/movie-card";
+import PixelBlast from "@/components/PixelBlast";
 
 export default function LandingPage() {
   const { user } = useAuth();
@@ -128,11 +129,28 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground relative overflow-hidden flex flex-col">
-      {/* Background Gradients */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
-        <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-primary/20 blur-[120px] rounded-full animate-pulse" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-blue-600/10 blur-[120px] rounded-full" />
+    <div className="min-h-screen text-foreground relative overflow-hidden flex flex-col">
+      {/* PixelBlast Background */}
+      <div className="fixed inset-0 z-0 w-full h-full">
+        <PixelBlast
+          variant="square"
+          pixelSize={4}
+          color="#B19EEF"
+          patternScale={2}
+          patternDensity={1}
+          pixelSizeJitter={0}
+          enableRipples
+          rippleSpeed={0.4}
+          rippleThickness={0.12}
+          rippleIntensityScale={1.5}
+          liquid={false}
+          liquidStrength={0.12}
+          liquidRadius={1.2}
+          liquidWobbleSpeed={5}
+          speed={0.5}
+          edgeFade={0.25}
+          transparent
+        />
       </div>
 
       {/* Nav */}
