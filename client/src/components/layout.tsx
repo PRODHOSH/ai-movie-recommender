@@ -1,9 +1,8 @@
 import { Link, useLocation } from "wouter";
-import { Film, Heart, History, LogOut, Sparkles } from "lucide-react";
+import { Film, Heart, History, LogOut, Sparkles, MessageSquare } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 import { Footer } from "@/components/footer";
-import { ConnectSection } from "@/components/connect-section";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
@@ -13,6 +12,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     { href: "/", label: "Discover", icon: Sparkles },
     { href: "/favorites", label: "Favorites", icon: Heart },
     { href: "/history", label: "History", icon: History },
+    { href: "/contact", label: "Contact", icon: MessageSquare },
   ];
 
   return (
@@ -89,7 +89,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <main className="flex-1 p-4 md:p-8 lg:p-12 max-w-[1600px] mx-auto w-full">
           {children}
         </main>
-        <ConnectSection />
         <Footer />
       </div>
 
