@@ -9,7 +9,6 @@ import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
 import { useTrendingMovies } from "@/hooks/use-movies";
 import { MovieCard } from "@/components/movie-card";
-import PixelBlast from "@/components/PixelBlast";
 
 export default function LandingPage() {
   const { user } = useAuth();
@@ -129,28 +128,30 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="min-h-screen text-foreground relative overflow-hidden flex flex-col">
-      {/* PixelBlast Background */}
+    <div className="min-h-screen text-foreground relative overflow-hidden flex flex-col galaxy-background">
+      {/* Galaxy Background */}
       <div className="fixed inset-0 z-0 w-full h-full">
-        <PixelBlast
-          variant="square"
-          pixelSize={4}
-          color="#B19EEF"
-          patternScale={2}
-          patternDensity={1}
-          pixelSizeJitter={0}
-          enableRipples
-          rippleSpeed={0.4}
-          rippleThickness={0.12}
-          rippleIntensityScale={1.5}
-          liquid={false}
-          liquidStrength={0.12}
-          liquidRadius={1.2}
-          liquidWobbleSpeed={5}
-          speed={0.5}
-          edgeFade={0.25}
-          transparent
-        />
+        {/* Deep space gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0015] via-[#1a0b2e] to-[#16001e]" />
+        
+        {/* Nebula clouds */}
+        <div className="absolute inset-0 opacity-40">
+          <div className="absolute top-[10%] left-[20%] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px] animate-pulse" />
+          <div className="absolute top-[40%] right-[15%] w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[100px] animate-pulse" style={{animationDelay: '2s'}} />
+          <div className="absolute bottom-[20%] left-[40%] w-[400px] h-[400px] bg-pink-600/25 rounded-full blur-[80px] animate-pulse" style={{animationDelay: '4s'}} />
+        </div>
+
+        {/* Stars layer 1 - small stars */}
+        <div className="stars-small absolute inset-0" />
+        
+        {/* Stars layer 2 - medium stars */}
+        <div className="stars-medium absolute inset-0" />
+        
+        {/* Stars layer 3 - large stars */}
+        <div className="stars-large absolute inset-0" />
+        
+        {/* Shooting stars */}
+        <div className="shooting-stars absolute inset-0" />
       </div>
 
       {/* Nav */}
@@ -322,26 +323,8 @@ export default function LandingPage() {
         </motion.div>
       </main>
 
-      {/* Trending Movies Carousel with Curved Design */}
+      {/* Trending Movies Carousel */}
       <section className="relative py-20 overflow-hidden">
-        {/* Curved background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent">
-          <svg className="absolute top-0 left-0 w-full h-24" viewBox="0 0 1440 120" preserveAspectRatio="none">
-            <path 
-              fill="currentColor" 
-              className="text-background"
-              d="M0,0 C480,100 960,100 1440,0 L1440,120 L0,120 Z"
-            />
-          </svg>
-          <svg className="absolute bottom-0 left-0 w-full h-24" viewBox="0 0 1440 120" preserveAspectRatio="none">
-            <path 
-              fill="currentColor" 
-              className="text-background"
-              d="M0,120 C480,20 960,20 1440,120 L1440,0 L0,0 Z"
-            />
-          </svg>
-        </div>
-
         <div className="relative max-w-7xl mx-auto px-4 md:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

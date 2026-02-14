@@ -81,3 +81,169 @@
 .glass-card {
   @apply bg-card/50 backdrop-blur-sm border border-white/5 hover:bg-card/80 transition-all duration-300;
 }
+
+/* Galaxy Background */
+.galaxy-background {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Stars animations */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+/* Small stars */
+.stars-small {
+  background-image: 
+    radial-gradient(1px 1px at 20% 30%, white, transparent),
+    radial-gradient(1px 1px at 60% 70%, white, transparent),
+    radial-gradient(1px 1px at 50% 50%, white, transparent),
+    radial-gradient(1px 1px at 80% 10%, white, transparent),
+    radial-gradient(1px 1px at 90% 60%, white, transparent),
+    radial-gradient(1px 1px at 30% 80%, white, transparent),
+    radial-gradient(1px 1px at 15% 90%, white, transparent),
+    radial-gradient(1px 1px at 70% 40%, white, transparent);
+  background-size: 200% 200%;
+  animation: twinkle 3s ease-in-out infinite;
+  background-repeat: repeat;
+}
+
+/* Medium stars */
+.stars-medium {
+  background-image: 
+    radial-gradient(1.5px 1.5px at 25% 20%, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1.5px 1.5px at 75% 85%, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1.5px 1.5px at 45% 60%, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1.5px 1.5px at 85% 45%, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1.5px 1.5px at 35% 15%, rgba(255,255,255,0.8), transparent);
+  background-size: 300% 300%;
+  animation: twinkle 4s ease-in-out infinite;
+  animation-delay: 1s;
+  background-repeat: repeat;
+}
+
+/* Large stars */
+.stars-large {
+  background-image: 
+    radial-gradient(2px 2px at 40% 35%, rgba(255,255,255,0.9), transparent),
+    radial-gradient(2px 2px at 65% 75%, rgba(255,255,255,0.9), transparent),
+    radial-gradient(2px 2px at 10% 55%, rgba(255,255,255,0.9), transparent),
+    radial-gradient(2px 2px at 95% 25%, rgba(255,255,255,0.9), transparent);
+  background-size: 400% 400%;
+  animation: twinkle 5s ease-in-out infinite;
+  animation-delay: 2s;
+  background-repeat: repeat;
+}
+
+/* Shooting stars */
+@keyframes shooting-star {
+  0% {
+    transform: translateX(0) translateY(0) rotate(-45deg);
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-500px) translateY(500px) rotate(-45deg);
+    opacity: 0;
+  }
+}
+
+.shooting-stars::before,
+.shooting-stars::after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 80px;
+  background: linear-gradient(to bottom, white, transparent);
+  animation: shooting-star 3s ease-in-out infinite;
+}
+
+.shooting-stars::before {
+  top: 10%;
+  right: 20%;
+  animation-delay: 2s;
+}
+
+.shooting-stars::after {
+  top: 40%;
+  right: 60%;
+  animation-delay: 5s;
+}
+
+/* Floating Particles */
+@keyframes float-particle {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(100vw, -100vh) scale(0.5);
+    opacity: 0;
+  }
+}
+
+@keyframes float-particle-reverse {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-100vw, 100vh) scale(0.3);
+    opacity: 0;
+  }
+}
+
+/* Particle container */
+.galaxy-background::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle 3px at 10% 20%, rgba(138, 43, 226, 0.6), transparent),
+    radial-gradient(circle 2px at 90% 80%, rgba(138, 43, 226, 0.4), transparent),
+    radial-gradient(circle 4px at 30% 60%, rgba(75, 0, 130, 0.5), transparent),
+    radial-gradient(circle 3px at 70% 40%, rgba(255, 255, 255, 0.3), transparent),
+    radial-gradient(circle 2px at 50% 10%, rgba(138, 43, 226, 0.4), transparent),
+    radial-gradient(circle 4px at 80% 90%, rgba(147, 112, 219, 0.5), transparent),
+    radial-gradient(circle 3px at 20% 70%, rgba(255, 255, 255, 0.2), transparent),
+    radial-gradient(circle 2px at 60% 30%, rgba(138, 43, 226, 0.3), transparent),
+    radial-gradient(circle 3px at 40% 90%, rgba(75, 0, 130, 0.4), transparent),
+    radial-gradient(circle 4px at 85% 50%, rgba(147, 112, 219, 0.6), transparent);
+  background-size: 200% 200%;
+  animation: float-particle 25s linear infinite;
+  pointer-events: none;
+}
+
+.galaxy-background::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle 2px at 25% 45%, rgba(147, 112, 219, 0.5), transparent),
+    radial-gradient(circle 3px at 75% 25%, rgba(138, 43, 226, 0.4), transparent),
+    radial-gradient(circle 4px at 15% 85%, rgba(75, 0, 130, 0.6), transparent),
+    radial-gradient(circle 2px at 65% 65%, rgba(255, 255, 255, 0.3), transparent),
+    radial-gradient(circle 3px at 45% 15%, rgba(138, 43, 226, 0.5), transparent),
+    radial-gradient(circle 4px at 95% 75%, rgba(147, 112, 219, 0.4), transparent),
+    radial-gradient(circle 2px at 35% 55%, rgba(75, 0, 130, 0.3), transparent),
+    radial-gradient(circle 3px at 55% 35%, rgba(255, 255, 255, 0.2), transparent);
+  background-size: 180% 180%;
+  animation: float-particle-reverse 30s linear infinite;
+  pointer-events: none;
+}
