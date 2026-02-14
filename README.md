@@ -8,6 +8,22 @@ An AI-powered movie recommender that understands your vibe. Tell us how you feel
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.6.3-3178C6?logo=typescript&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-38B2AC?logo=tailwind-css&logoColor=white)
 
+## 📸 Preview
+
+### Landing Page
+![Landing Page](./screenshots/landing.png)
+
+### AI-Powered Discover
+![Discover Page](./screenshots/discover.png)
+![Discover Page](./screenshots/discover_2.png)
+
+
+### Your Favorites Collection
+![Favorites Page](./screenshots/favorites.png)
+
+### Search History
+![History Page](./screenshots/history.png)
+
 ## ✨ Features
 
 - 🤖 **AI-Powered** - Gemini AI analyzes your mood
