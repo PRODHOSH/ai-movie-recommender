@@ -1,39 +1,27 @@
 import type { TMDBGenre } from './tmdb';
 
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
-
-if (!GEMINI_API_KEY) {
-  console.warn('Gemini API key not found. AI recommendations will be limited.');
-}
-
 export interface MovieRecommendation {
   genres: string[];
   keywords: string[];
   reasoning: string;
 }
 
-async function callGeminiAPI(prompt: string): Promise<string> {
-  const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+// Call our secure serverless function instead of directly calling Gemini API
+async function callGeminiAPI(mood: string): Promise<string[]> {
+  const response = await fetch('/api/gemini', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      contents: [{
-        parts: [{
-          text: prompt
-        }]
-      }]
-    }),
+    body: JSON.stringify({ mood }),
   });
 
   if (!response.ok) {
-    throw new Error(`Gemini API error: ${response.statusText}`);
+    throw new Error(`API error: ${response.statusText}`);
   }
 
   const data = await response.json();
-  return data.candidates[0]?.content?.parts[0]?.text || '';
+  return data.genres || [];
 }
 
 export const geminiClient = {
@@ -41,54 +29,14 @@ export const geminiClient = {
     mood: string,
     availableGenres: TMDBGenre[]
   ): Promise<MovieRecommendation> {
-    if (!GEMINI_API_KEY) {
-      // Fallback recommendations without AI
-      return {
-        genres: ['Action', 'Adventure'],
-        keywords: ['popular', 'trending'],
-        reasoning: 'Showing popular movies (AI recommendations unavailable)',
-      };
-    }
-
     try {
-      const genreList = availableGenres.map((g) => g.name).join(', ');
+      // Call our secure serverless API
+      const genres = await callGeminiAPI(mood);
 
-      const prompt = `You are a movie recommendation expert. Based on the user's mood or situation, suggest movie genres and themes.
-
-User's mood/situation: "${mood}"
-
-Available genres: ${genreList}
-
-Please provide:
-1. 2-3 most suitable genres from the available list (just the genre names)
-2. 2-3 keywords or themes that describe what they might enjoy
-3. Brief reasoning for your recommendation (1 sentence)
-
-Respond in JSON format:
-{
-  "genres": ["genre1", "genre2"],
-  "keywords": ["keyword1", "keyword2"],
-  "reasoning": "explanation"
-}`;
-
-      const text = await callGeminiAPI(prompt);
-
-      // Try to parse JSON from the response
-      const jsonMatch = text.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        const parsed = JSON.parse(jsonMatch[0]);
-        return {
-          genres: parsed.genres || ['Drama'],
-          keywords: parsed.keywords || [],
-          reasoning: parsed.reasoning || 'AI-powered recommendation',
-        };
-      }
-
-      // Fallback if JSON parsing fails
       return {
-        genres: ['Drama', 'Comedy'],
-        keywords: [mood.toLowerCase()],
-        reasoning: 'Based on your mood',
+        genres: genres.slice(0, 3),
+        keywords: [mood.toLowerCase(), 'recommended'],
+        reasoning: 'AI-powered recommendations based on your mood',
       };
     } catch (error) {
       console.error('Error getting AI recommendations:', error);

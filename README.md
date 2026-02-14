@@ -49,21 +49,34 @@ Quick steps:
 
 ### 5. Configure Environment Variables
 
-Copy the environment template:
+**Client-side variables** (exposed to browser):
 
+Copy the template:
 ```bash
 cd client
 cp .env.example .env
 ```
 
-Edit `client/.env` and add your keys:
-
+Edit `client/.env`:
 ```env
 VITE_SUPABASE_URL=https://your-project.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key-here
 VITE_TMDB_API_KEY=your-tmdb-api-key-here
-VITE_GEMINI_API_KEY=your-gemini-api-key-here
 ```
+
+**Server-side variables** (kept secret):
+
+Copy the template:
+```bash
+cp .env.example .env
+```
+
+Edit root `.env`:
+```env
+GEMINI_API_KEY=your-gemini-api-key-here
+```
+
+**🔒 Security**: The Gemini API key is now secured in a serverless function and never exposed to the browser!
 
 ### 6. Run the Application
 
@@ -94,14 +107,35 @@ The app will open at `http://localhost:5173`
 ## Project Structure
 
 ```
+api/
+  gemini.ts         # Serverless function (Gemini API - secured)
 client/
   src/
     components/     # UI components
     hooks/          # Custom React hooks
     lib/            # API clients (Supabase, TMDB, Gemini)
     pages/          # Page components
-  .env              # Environment variables (create this)
+  .env              # Client environment variables
+.env                # Server environment variables (API keys)
 ```
+
+## Deployment
+
+### Deploy to Vercel
+
+1. Push your code to GitHub
+2. Go to [Vercel](https://vercel.com)
+3. Import your repository
+4. Add environment variables:
+   - **Root Project Settings**:
+     - `GEMINI_API_KEY` - Your Gemini API key (server-side)
+   - **Client Settings** (if needed):
+     - `VITE_SUPABASE_URL`
+     - `VITE_SUPABASE_ANON_KEY`
+     - `VITE_TMDB_API_KEY`
+5. Deploy!
+
+**Note**: The serverless function in `api/gemini.ts` keeps your Gemini API key secure on the server.
 
 ## API Rate Limits
 

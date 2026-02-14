@@ -355,23 +355,30 @@ export default function LandingPage() {
             </div>
           ) : (
             <div className="relative overflow-hidden">
-              {/* Curved path container */}
+              {/* Circular path container */}
               <div 
                 ref={scrollRef}
-                className="flex gap-6 overflow-x-hidden"
+                className="flex gap-8 overflow-x-hidden"
                 style={{ 
                   scrollbarWidth: 'none', 
                   msOverflowStyle: 'none',
-                  height: '450px',
-                  alignItems: 'flex-start'
+                  height: '500px',
+                  alignItems: 'center',
+                  paddingTop: '100px'
                 }}
               >
                 {/* Duplicate movies 3 times for seamless infinite loop */}
                 {trendingMovies && [...trendingMovies, ...trendingMovies, ...trendingMovies].map((movie, idx) => {
-                  // Calculate position in the curve
-                  const position = (idx % (trendingMovies.length * 3)) / (trendingMovies.length * 3);
-                  // Create downward arc using sine wave
-                  const verticalOffset = Math.sin(position * Math.PI * 4) * 60 + 60;
+                  // Calculate position in the circular path (0 to 1)
+                  const totalMovies = trendingMovies.length * 3;
+                  const position = idx / totalMovies;
+                  
+                  // Create circular motion using sine and cosine
+                  // Full circle path with smooth curves
+                  const angle = position * Math.PI * 6; // Multiple rotations for smooth effect
+                  const verticalOffset = Math.sin(angle) * 80; // Up and down movement
+                  const scale = 0.8 + (Math.cos(angle) * 0.2); // Size variation for depth
+                  const rotation = Math.sin(angle) * 8; // Slight rotation for 3D effect
                   
                   return (
                     <motion.div
@@ -382,8 +389,9 @@ export default function LandingPage() {
                       transition={{ duration: 0.3, delay: (idx % 10) * 0.03 }}
                       className="flex-shrink-0 w-52"
                       style={{
-                        marginTop: `${verticalOffset}px`,
-                        transition: 'margin-top 0.3s ease-out'
+                        transform: `translateY(${verticalOffset}px) scale(${scale}) rotate(${rotation}deg)`,
+                        transition: 'transform 0.3s ease-out',
+                        zIndex: Math.floor(scale * 10)
                       }}
                     >
                       <MovieCard movie={movie} delay={0} compact />
@@ -393,8 +401,8 @@ export default function LandingPage() {
               </div>
               
               {/* Gradient overlays */}
-              <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent pointer-events-none z-10" />
-              <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent pointer-events-none z-10" />
+              <div className="absolute left-0 top-0 bottom-0 w-40 bg-gradient-to-r from-background via-background/80 to-transparent pointer-events-none z-10" />
+              <div className="absolute right-0 top-0 bottom-0 w-40 bg-gradient-to-l from-background via-background/80 to-transparent pointer-events-none z-10" />
             </div>
           )}
         </div>
