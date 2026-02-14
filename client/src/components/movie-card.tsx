@@ -9,9 +9,10 @@ interface MovieCardProps {
   delay?: number;
   compact?: boolean;
   large?: boolean;
+  onClick?: () => void;
 }
 
-export function MovieCard({ movie, delay = 0, compact = false, large = false }: MovieCardProps) {
+export function MovieCard({ movie, delay = 0, compact = false, large = false, onClick }: MovieCardProps) {
   const { data: favorites } = useFavorites();
   const addFavorite = useAddFavorite();
   const removeFavorite = useRemoveFavorite();
@@ -44,7 +45,8 @@ export function MovieCard({ movie, delay = 0, compact = false, large = false }: 
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3, delay }}
-        className="group relative bg-card rounded-xl overflow-hidden border border-white/10 hover:border-primary/30 transition-all duration-300 hover:scale-105"
+        onClick={onClick}
+        className="group relative bg-card rounded-xl overflow-hidden border border-white/10 hover:border-primary/30 transition-all duration-300 hover:scale-105 cursor-pointer"
       >
         <div className="aspect-[2/3] w-full relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10" />
@@ -94,7 +96,8 @@ export function MovieCard({ movie, delay = 0, compact = false, large = false }: 
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3, delay }}
-        className="group relative bg-card rounded-xl overflow-hidden border border-white/10 hover:border-primary/30 transition-all duration-300"
+        onClick={onClick}
+        className="group relative bg-card rounded-xl overflow-hidden border border-white/10 hover:border-primary/30 transition-all duration-300 cursor-pointer"
       >
         <div className="aspect-[2/3] w-full relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent z-10" />
@@ -143,7 +146,8 @@ export function MovieCard({ movie, delay = 0, compact = false, large = false }: 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay, ease: "easeOut" }}
-      className="group relative bg-card rounded-xl overflow-hidden border border-white/10 hover:border-primary/30 transition-all duration-300 h-full flex flex-col"
+      onClick={onClick}
+      className="group relative bg-card rounded-xl overflow-hidden border border-white/10 hover:border-primary/30 transition-all duration-300 h-full flex flex-col cursor-pointer"
     >
       <div className="aspect-[2/3] w-full relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />

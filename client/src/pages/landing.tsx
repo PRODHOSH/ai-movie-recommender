@@ -21,6 +21,7 @@ export default function LandingPage() {
   const [loading, setLoading] = useState(false);
   const { data: trendingMovies, isLoading: trendingLoading } = useTrendingMovies();
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [selectedMovie, setSelectedMovie] = useState<any>(null);
 
   // Auto-scroll effect with improved infinite loop
   useEffect(() => {
@@ -272,13 +273,101 @@ export default function LandingPage() {
         </div>
       )}
 
+      {/* Movie Details Modal */}
+      {selectedMovie && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4" onClick={() => setSelectedMovie(null)}>
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ type: "spring", duration: 0.5 }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-card/95 border border-white/20 rounded-3xl max-w-5xl w-full max-h-[90vh] overflow-hidden shadow-2xl backdrop-blur-xl"
+          >
+            <div className="grid md:grid-cols-5 gap-0 h-full max-h-[90vh]">
+              {/* Left: Movie Poster */}
+              <div className="md:col-span-2 relative">
+                <div className="absolute top-4 right-4 z-10">
+                  <button 
+                    onClick={() => setSelectedMovie(null)}
+                    className="p-2 rounded-full bg-black/70 hover:bg-black/90 text-white transition-colors"
+                  >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+                <img
+                  src={selectedMovie.posterPath ? `https://image.tmdb.org/t/p/w500${selectedMovie.posterPath}` : "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=500&h=750&fit=crop"}
+                  alt={selectedMovie.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* Right: Movie Details */}
+              <div className="md:col-span-3 p-8 overflow-y-auto">
+                <div className="space-y-6">
+                  <div>
+                    <h2 className="text-4xl font-display font-bold text-white mb-2">{selectedMovie.title}</h2>
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <svg className="w-5 h-5 text-yellow-400 fill-yellow-400" viewBox="0 0 20 20">
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <span className="font-semibold">{Number(selectedMovie.voteAverage).toFixed(1)}</span>
+                      </span>
+                      <span>•</span>
+                      <span>{selectedMovie.releaseDate?.split("-")[0] || "Unknown"}</span>
+                      {selectedMovie.genres && selectedMovie.genres.length > 0 && (
+                        <>
+                          <span>•</span>
+                          <span>{selectedMovie.genres.slice(0, 2).join(", ")}</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-semibold text-white mb-2">Overview</h3>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {selectedMovie.overview || "No overview available."}
+                    </p>
+                  </div>
+
+                  {selectedMovie.genres && selectedMovie.genres.length > 0 && (
+                    <div>
+                      <h3 className="text-lg font-semibold text-white mb-2">Genres</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedMovie.genres.map((genre: string, idx: number) => (
+                          <span key={idx} className="px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm">
+                            {genre}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="pt-4">
+                    <button
+                      onClick={() => setSelectedMovie(null)}
+                      className="w-full md:w-auto px-8 py-3 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold transition-all duration-300 hover:scale-105"
+                    >
+                      Close
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
       {/* Hero */}
-      <main className="relative z-10 flex flex-col items-center justify-center flex-1 px-4 text-center max-w-5xl mx-auto py-20">
+      <main className="relative z-10 flex flex-col items-start justify-center flex-1 px-4 md:px-12 max-w-7xl mx-auto py-20 w-full">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="space-y-8 bg-black/40 backdrop-blur-md rounded-3xl p-12 border border-white/10"
+          className="space-y-8 max-w-4xl"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-4">
             <Sparkles className="w-4 h-4" />
@@ -292,11 +381,11 @@ export default function LandingPage() {
             </span>
           </h1>
 
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed">
             Stop scrolling for hours. Tell us how you feel, and our AI will curate the perfect watchlist for your current vibe.
           </p>
 
-          <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="pt-8 flex flex-col sm:flex-row items-start gap-4">
             <button
               onClick={() => { setShowAuth(true); setIsSignUp(true); }}
               className="group inline-flex items-center gap-3 px-8 py-4 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-semibold shadow-lg shadow-primary/25 transition-all duration-300 hover:scale-105"
@@ -358,7 +447,8 @@ export default function LandingPage() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.3, delay: (idx % 10) * 0.03 }}
-                    className="flex-shrink-0 w-52"
+                    className="flex-shrink-0 w-52 cursor-pointer"
+                    onClick={() => setSelectedMovie(movie)}
                   >
                     <MovieCard movie={movie} delay={0} compact />
                   </motion.div>

@@ -8,6 +8,7 @@ export default function HomePage() {
   const [inputMood, setInputMood] = useState("");
   const [queryMood, setQueryMood] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [selectedMovie, setSelectedMovie] = useState<any>(null);
   
   const { data, isLoading, isError } = useRecommendations(queryMood || undefined);
   const { data: trendingMovies, isLoading: trendingLoading } = useTrendingMovies();
