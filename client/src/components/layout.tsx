@@ -2,6 +2,7 @@ import { Link, useLocation } from "wouter";
 import { Film, Heart, History, LogOut, Sparkles } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
+import Beams from "@/components/beams";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
@@ -14,7 +15,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row overflow-x-hidden">
+    <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row overflow-x-hidden relative">
+      {/* Beams Background */}
+      <div className="fixed inset-0 z-0 w-full h-full">
+        <Beams
+          beamWidth={3}
+          beamHeight={30}
+          beamNumber={20}
+          lightColor="#ffffff"
+          speed={2}
+          noiseIntensity={1.75}
+          scale={0.2}
+          rotation={30}
+        />
+      </div>
+
       {/* Mobile Header */}
       <div className="md:hidden flex items-center justify-between p-4 glass sticky top-0 z-50">
         <div className="flex items-center gap-2 text-primary">
@@ -73,7 +88,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 md:ml-64 p-4 md:p-8 lg:p-12 max-w-[1600px] mx-auto w-full overflow-x-hidden">
+      <main className="flex-1 md:ml-64 p-4 md:p-8 lg:p-12 max-w-[1600px] mx-auto w-full overflow-x-hidden relative z-10">
         {children}
       </main>
 

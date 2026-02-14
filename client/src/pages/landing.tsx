@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
 import { useTrendingMovies } from "@/hooks/use-movies";
 import { MovieCard } from "@/components/movie-card";
+import Beams from "@/components/beams";
 
 export default function LandingPage() {
   const { user } = useAuth();
@@ -128,30 +129,19 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="min-h-screen text-foreground relative overflow-hidden flex flex-col galaxy-background">
-      {/* Galaxy Background */}
+    <div className="min-h-screen text-foreground relative overflow-hidden flex flex-col">
+      {/* Beams Background */}
       <div className="fixed inset-0 z-0 w-full h-full">
-        {/* Deep space gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0015] via-[#1a0b2e] to-[#16001e]" />
-        
-        {/* Nebula clouds */}
-        <div className="absolute inset-0 opacity-40">
-          <div className="absolute top-[10%] left-[20%] w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[120px] animate-pulse" />
-          <div className="absolute top-[40%] right-[15%] w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[100px] animate-pulse" style={{animationDelay: '2s'}} />
-          <div className="absolute bottom-[20%] left-[40%] w-[400px] h-[400px] bg-pink-600/25 rounded-full blur-[80px] animate-pulse" style={{animationDelay: '4s'}} />
-        </div>
-
-        {/* Stars layer 1 - small stars */}
-        <div className="stars-small absolute inset-0" />
-        
-        {/* Stars layer 2 - medium stars */}
-        <div className="stars-medium absolute inset-0" />
-        
-        {/* Stars layer 3 - large stars */}
-        <div className="stars-large absolute inset-0" />
-        
-        {/* Shooting stars */}
-        <div className="shooting-stars absolute inset-0" />
+        <Beams
+          beamWidth={3}
+          beamHeight={30}
+          beamNumber={20}
+          lightColor="#000000"
+          speed={2}
+          noiseIntensity={1.75}
+          scale={0.2}
+          rotation={45}}
+        />
       </div>
 
       {/* Nav */}
