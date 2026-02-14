@@ -2,7 +2,6 @@ import { Link, useLocation } from "wouter";
 import { Film, Heart, History, LogOut, Sparkles } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
-import Beams from "@/components/beams";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
@@ -15,19 +14,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row overflow-x-hidden relative">
-      {/* Beams Background */}
-      <div className="fixed inset-0 z-0 w-full h-full">
-        <Beams
-          beamWidth={3}
-          beamHeight={30}
-          beamNumber={20}
-          lightColor="#ffffff"
-          speed={2}
-          noiseIntensity={1.75}
-          scale={0.2}
-          rotation={30}
-        />
+    <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row overflow-x-hidden relative" style={{ background: 'linear-gradient(to bottom, #0a0015, #1a0b2e, #16001e)' }}>
+      {/* Animated Background */}
+      <div className="fixed inset-0 z-0 w-full h-full overflow-hidden">
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute top-[10%] left-[20%] w-[600px] h-[600px] bg-purple-600/40 rounded-full blur-[120px] animate-pulse" />
+          <div className="absolute top-[40%] right-[15%] w-[500px] h-[500px] bg-blue-600/30 rounded-full blur-[100px] animate-pulse" style={{animationDelay: '2s'}} />
+          <div className="absolute bottom-[20%] left-[40%] w-[400px] h-[400px] bg-pink-600/30 rounded-full blur-[80px] animate-pulse" style={{animationDelay: '4s'}} />
+        </div>
       </div>
 
       {/* Mobile Header */}

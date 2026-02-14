@@ -9,7 +9,6 @@ import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
 import { useTrendingMovies } from "@/hooks/use-movies";
 import { MovieCard } from "@/components/movie-card";
-import Beams from "@/components/beams";
 
 export default function LandingPage() {
   const { user } = useAuth();
@@ -129,19 +128,15 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="min-h-screen text-foreground relative overflow-hidden flex flex-col">
-      {/* Beams Background */}
-      <div className="fixed inset-0 z-0 w-full h-full">
-        <Beams
-          beamWidth={3}
-          beamHeight={30}
-          beamNumber={20}
-          lightColor="#000000"
-          speed={2}
-          noiseIntensity={1.75}
-          scale={0.2}
-          rotation={45}}
-        />
+    <div className="min-h-screen text-foreground relative overflow-hidden flex flex-col" style={{ background: 'linear-gradient(to bottom, #0a0015, #1a0b2e, #16001e)' }}>
+      {/* Animated Background */}
+      <div className="fixed inset-0 z-0 w-full h-full overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0015] via-[#1a0b2e] to-[#16001e]" />
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute top-[10%] left-[20%] w-[600px] h-[600px] bg-purple-600/40 rounded-full blur-[120px] animate-pulse" />
+          <div className="absolute top-[40%] right-[15%] w-[500px] h-[500px] bg-blue-600/30 rounded-full blur-[100px] animate-pulse" style={{animationDelay: '2s'}} />
+          <div className="absolute bottom-[20%] left-[40%] w-[400px] h-[400px] bg-pink-600/30 rounded-full blur-[80px] animate-pulse" style={{animationDelay: '4s'}} />
+        </div>
       </div>
 
       {/* Nav */}
