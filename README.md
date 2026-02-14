@@ -21,72 +21,17 @@ npm install
 
 ### 2. Set Up Supabase
 
-1. Create a free account at [Supabase](https://supabase.com)
+**📋 Complete Setup Guide: [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)**
+
+Quick steps:
+1. Create account at [Supabase](https://supabase.com)
 2. Create a new project
-3. Go to Project Settings > API
-4. Copy your **Project URL** and **anon/public key**
+3. Get your Project URL and anon key from Settings > API
+4. Run the SQL commands to create tables (see full guide)
+5. Enable Google OAuth (optional but recommended)
+6. Add keys to `client/.env`
 
-#### Create Database Tables
-
-In Supabase SQL Editor, run these commands:
-
-```sql
--- Favorites table
-CREATE TABLE favorites (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-  movie_id INTEGER NOT NULL,
-  movie_data JSONB NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE(user_id, movie_id)
-);
-
--- Enable Row Level Security
-ALTER TABLE favorites ENABLE ROW LEVEL SECURITY;
-
--- Policy: Users can only see their own favorites
-CREATE POLICY "Users can view own favorites"
-  ON favorites FOR SELECT
-  USING (auth.uid() = user_id);
-
--- Policy: Users can insert their own favorites
-CREATE POLICY "Users can insert own favorites"
-  ON favorites FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
-
--- Policy: Users can delete their own favorites
-CREATE POLICY "Users can delete own favorites"
-  ON favorites FOR DELETE
-  USING (auth.uid() = user_id);
-
--- Mood History table
-CREATE TABLE mood_history (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-  mood TEXT NOT NULL,
-  genres TEXT[] NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Enable Row Level Security
-ALTER TABLE mood_history ENABLE ROW LEVEL SECURITY;
-
--- Policy: Users can view their own history
-CREATE POLICY "Users can view own history"
-  ON mood_history FOR SELECT
-  USING (auth.uid() = user_id);
-
--- Policy: Users can insert their own history
-CREATE POLICY "Users can insert own history"
-  ON mood_history FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
-```
-
-#### Enable Google OAuth (Optional)
-
-1. In Supabase Dashboard: Authentication > Providers > Google
-2. Follow the instructions to set up Google OAuth
-3. Add your authorized redirect URL
+**For detailed step-by-step instructions with screenshots and troubleshooting, see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)**
 
 ### 3. Get TMDB API Key
 
