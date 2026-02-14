@@ -374,7 +374,7 @@ export default function LandingPage() {
       )}
 
       {/* Hero */}
-      <main className="relative z-10 flex flex-col items-center justify-center flex-1 px-6 md:px-12 max-w-7xl mx-auto py-16 md:py-24 w-full">
+      <main className="relative z-10 flex flex-col items-center justify-center flex-1 px-6 md:px-12 max-w-7xl mx-auto pt-8 pb-12 md:pt-12 md:pb-16 w-full">
         <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center w-full">
           {/* Left: Hero Content */}
           <motion.div
