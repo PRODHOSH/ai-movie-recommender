@@ -22,41 +22,53 @@ export default function LandingPage() {
   const { data: trendingMovies, isLoading: trendingLoading } = useTrendingMovies();
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll effect
+  // Auto-scroll effect with improved infinite loop
   useEffect(() => {
     const scrollContainer = scrollRef.current;
     if (!scrollContainer || !trendingMovies?.length) return;
 
+    let animationFrameId: number;
     let scrollPos = 0;
-    const scrollSpeed = 0.5; // pixels per frame
+    const scrollSpeed = 1; // pixels per frame
     
     const autoScroll = () => {
       if (scrollContainer) {
         scrollPos += scrollSpeed;
         
-        // Reset scroll when reaching the end
-        if (scrollPos >= scrollContainer.scrollWidth / 2) {
+        const maxScroll = scrollContainer.scrollWidth / 2;
+        
+        // Reset to beginning seamlessly when halfway through
+        if (scrollPos >= maxScroll) {
           scrollPos = 0;
         }
         
         scrollContainer.scrollLeft = scrollPos;
       }
+      animationFrameId = requestAnimationFrame(autoScroll);
     };
 
-    const intervalId = setInterval(autoScroll, 20);
+    animationFrameId = requestAnimationFrame(autoScroll);
 
     // Pause on hover
-    const handleMouseEnter = () => clearInterval(intervalId);
+    const handleMouseEnter = () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
+    
     const handleMouseLeave = () => {
-      const newIntervalId = setInterval(autoScroll, 20);
-      return newIntervalId;
+      animationFrameId = requestAnimationFrame(autoScroll);
     };
 
     scrollContainer.addEventListener('mouseenter', handleMouseEnter);
+    scrollContainer.addEventListener('mouseleave', handleMouseLeave);
     
     return () => {
-      clearInterval(intervalId);
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
       scrollContainer?.removeEventListener('mouseenter', handleMouseEnter);
+      scrollContainer?.removeEventListener('mouseleave', handleMouseLeave);
     };
   }, [trendingMovies]);
 
@@ -290,26 +302,6 @@ export default function LandingPage() {
             </button>
           </div>
         </motion.div>
-        
-        {/* Visual Showcase */}
-        <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-4xl opacity-50">
-           {[
-             "https://image.tmdb.org/t/p/w500/8Gxv8Z7R9G9tuz97I3ORv2Lyd9n.jpg",
-             "https://image.tmdb.org/t/p/w500/q719jsmZcy61BDs616C0p9gJmOq.jpg",
-             "https://image.tmdb.org/t/p/w500/t6SnaqvihT2uB9vSlpS1iQClS8S.jpg",
-             "https://image.tmdb.org/t/p/w500/ldfCF96R1NNmIoeH0rSTpZaqTvS.jpg"
-           ].map((src, i) => (
-             <motion.div 
-               key={i}
-               initial={{ opacity: 0, y: 50 }}
-               animate={{ opacity: 1, y: 0 }}
-               transition={{ delay: 0.1 * i, duration: 0.5 }}
-               className="aspect-[2/3] rounded-xl overflow-hidden border border-white/10"
-             >
-               <img src={src} alt="Movie Poster" className="w-full h-full object-cover" />
-             </motion.div>
-           ))}
-        </div>
       </main>
 
       {/* Trending Movies Carousel with Curved Design */}
@@ -365,18 +357,22 @@ export default function LandingPage() {
             <div className="relative">
               <div 
                 ref={scrollRef}
-                className="flex gap-6 overflow-x-hidden scroll-smooth"
+                className="flex gap-6 overflow-x-hidden scroll-smooth py-8"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
               >
-                {/* Duplicate movies for infinite loop effect */}
-                {trendingMovies && [...trendingMovies, ...trendingMovies].map((movie, idx) => (
+                {/* Duplicate movies 3 times for seamless infinite loop */}
+                {trendingMovies && [...trendingMovies, ...trendingMovies, ...trendingMovies].map((movie, idx) => (
                   <motion.div
                     key={`${movie.tmdbId}-${idx}`}
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.3, delay: (idx % 10) * 0.05 }}
+                    transition={{ duration: 0.3, delay: (idx % 10) * 0.03 }}
                     className="flex-shrink-0 w-52"
+                    style={{
+                      animation: `wave 3s ease-in-out infinite`,
+                      animationDelay: `${idx * 0.2}s`
+                    }}
                   >
                     <MovieCard movie={movie} delay={0} compact />
                   </motion.div>
@@ -389,6 +385,24 @@ export default function LandingPage() {
             </div>
           )}
         </div>
+
+        {/* CSS for wave animation */}
+        <style>{`
+          @keyframes wave {
+            0%, 100% {
+              transform: translateY(0px) rotate(0deg);
+            }
+            25% {
+              transform: translateY(-15px) rotate(2deg);
+            }
+            50% {
+              transform: translateY(-25px) rotate(0deg);
+            }
+            75% {
+              transform: translateY(-15px) rotate(-2deg);
+            }
+          }
+        `}</style>
       </section>
 
       {/* Footer */}
