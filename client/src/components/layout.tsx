@@ -2,6 +2,7 @@ import { Link, useLocation } from "wouter";
 import { Film, Heart, History, LogOut, Sparkles } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
+import { Footer } from "@/components/footer";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
@@ -83,9 +84,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 md:ml-64 p-4 md:p-8 lg:p-12 max-w-[1600px] mx-auto w-full overflow-x-hidden relative z-10">
-        {children}
-      </main>
+      <div className="flex-1 md:ml-64 flex flex-col overflow-x-hidden relative z-10">
+        <main className="flex-1 p-4 md:p-8 lg:p-12 max-w-[1600px] mx-auto w-full">
+          {children}
+        </main>
+        <Footer />
+      </div>
 
       {/* Mobile Bottom Nav */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-black border-t border-white/10 flex justify-around p-4 z-50">

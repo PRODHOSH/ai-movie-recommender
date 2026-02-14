@@ -2,6 +2,7 @@ import { Sparkles, ArrowRight, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/lib/supabase";
+import { Footer } from "@/components/footer";
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -554,48 +555,7 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-white/5 py-12 px-6 bg-black/20 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
-          <div className="space-y-4">
-            <div className="flex items-center gap-2 text-primary">
-              <img src="/favicon.png" alt="CINE-AI" className="w-7 h-7" />
-              <span className="font-display font-bold text-xl tracking-wide">CINE-AI</span>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              Revolutionizing movie discovery through the power of artificial intelligence. Find your next favorite film in seconds.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <h4 className="text-sm font-semibold uppercase tracking-wider text-white">Platform</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="/" className="hover:text-primary transition-colors">Discover</a></li>
-                <li><a href="/favorites" className="hover:text-primary transition-colors">Favorites</a></li>
-                <li><a href="/history" className="hover:text-primary transition-colors">History</a></li>
-              </ul>
-            </div>
-            <div className="space-y-4">
-              <h4 className="text-sm font-semibold uppercase tracking-wider text-white">Legal</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-primary transition-colors">Privacy</a></li>
-                <li><a href="#" className="hover:text-primary transition-colors">Terms</a></li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-white">Powered By</h4>
-            <div className="flex gap-4">
-              <div className="px-3 py-1 rounded bg-white/5 border border-white/10 text-xs font-medium">Gemini AI</div>
-              <div className="px-3 py-1 rounded bg-white/5 border border-white/10 text-xs font-medium">TMDB API</div>
-            </div>
-          </div>
-        </div>
-        <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-white/5 text-center text-sm text-muted-foreground">
-          © 2026 CINE-AI. All rights reserved.
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
