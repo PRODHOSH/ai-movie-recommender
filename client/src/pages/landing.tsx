@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/lib/supabase";
 import { Footer } from "@/components/footer";
+import { ConnectSection } from "@/components/connect-section";
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -554,6 +555,9 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Connect Section */}
+      <ConnectSection />
+      
       {/* Footer */}
       <Footer />
     </div>

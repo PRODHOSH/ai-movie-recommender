@@ -3,6 +3,7 @@ import { Film, Heart, History, LogOut, Sparkles } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 import { Footer } from "@/components/footer";
+import { ConnectSection } from "@/components/connect-section";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
@@ -88,6 +89,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <main className="flex-1 p-4 md:p-8 lg:p-12 max-w-[1600px] mx-auto w-full">
           {children}
         </main>
+        <ConnectSection />
         <Footer />
       </div>
 

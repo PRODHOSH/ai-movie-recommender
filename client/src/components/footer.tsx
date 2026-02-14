@@ -1,4 +1,4 @@
-import { Github, Instagram } from "lucide-react";
+import { Github, Instagram, Linkedin } from "lucide-react";
 
 export function Footer() {
   return (
@@ -48,6 +48,14 @@ export function Footer() {
                 className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 hover:border-primary/50 transition-all"
               >
                 <Github className="w-4 h-4 text-white" />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/prodhosh"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded-full bg-blue-600/20 border border-blue-500/30 flex items-center justify-center hover:bg-blue-600/30 hover:border-blue-500/50 transition-all"
+              >
+                <Linkedin className="w-4 h-4 text-blue-400" />
               </a>
               <a
                 href="https://instagram.com/itzprodhosh"
