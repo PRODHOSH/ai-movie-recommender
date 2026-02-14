@@ -108,7 +108,10 @@ The app will open at `http://localhost:5173`
 
 ```
 api/
-  gemini.ts         # Serverless function (Gemini API - secured)
+  gemini.ts         # Vercel serverless function (Gemini API - secured)
+netlify/
+  functions/
+    gemini.ts       # Netlify serverless function (Gemini API - secured)
 client/
   src/
     components/     # UI components
@@ -117,11 +120,30 @@ client/
     pages/          # Page components
   .env              # Client environment variables
 .env                # Server environment variables (API keys)
+netlify.toml        # Netlify configuration
 ```
 
 ## Deployment
 
-### Deploy to Vercel
+### Deploy to Netlify (Recommended)
+
+The project is pre-configured with `netlify.toml` for easy deployment:
+
+1. Push your code to GitHub
+2. Go to [Netlify](https://app.netlify.com)
+3. Click "Add new site" → "Import an existing project"
+4. Connect your GitHub repository
+5. Netlify will auto-detect the `netlify.toml` configuration
+6. Add environment variables in Site settings → Environment variables:
+   - `VITE_SUPABASE_URL` - Your Supabase project URL
+   - `VITE_SUPABASE_ANON_KEY` - Your Supabase anon key
+   - `VITE_TMDB_API_KEY` - Your TMDB API key
+   - `GEMINI_API_KEY` - Your Gemini API key (server-side only)
+7. Deploy!
+
+**Note**: The serverless function in `netlify/functions/gemini.ts` keeps your Gemini API key secure on the server.
+
+### Deploy to Vercel (Alternative)
 
 1. Push your code to GitHub
 2. Go to [Vercel](https://vercel.com)
