@@ -1,12 +1,14 @@
-import { Sparkles, Film, ArrowRight } from "lucide-react";
+import { Sparkles, ArrowRight, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/lib/supabase";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useLocation } from "wouter";
+import { useTrendingMovies } from "@/hooks/use-movies";
+import { MovieCard } from "@/components/movie-card";
 
 export default function LandingPage() {
   const { user } = useAuth();
@@ -17,6 +19,46 @@ export default function LandingPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const { data: trendingMovies, isLoading: trendingLoading } = useTrendingMovies();
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll effect
+  useEffect(() => {
+    const scrollContainer = scrollRef.current;
+    if (!scrollContainer || !trendingMovies?.length) return;
+
+    let scrollPos = 0;
+    const scrollSpeed = 0.5; // pixels per frame
+    
+    const autoScroll = () => {
+      if (scrollContainer) {
+        scrollPos += scrollSpeed;
+        
+        // Reset scroll when reaching the end
+        if (scrollPos >= scrollContainer.scrollWidth / 2) {
+          scrollPos = 0;
+        }
+        
+        scrollContainer.scrollLeft = scrollPos;
+      }
+    };
+
+    const intervalId = setInterval(autoScroll, 20);
+
+    // Pause on hover
+    const handleMouseEnter = () => clearInterval(intervalId);
+    const handleMouseLeave = () => {
+      const newIntervalId = setInterval(autoScroll, 20);
+      return newIntervalId;
+    };
+
+    scrollContainer.addEventListener('mouseenter', handleMouseEnter);
+    
+    return () => {
+      clearInterval(intervalId);
+      scrollContainer?.removeEventListener('mouseenter', handleMouseEnter);
+    };
+  }, [trendingMovies]);
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -269,6 +311,85 @@ export default function LandingPage() {
            ))}
         </div>
       </main>
+
+      {/* Trending Movies Carousel with Curved Design */}
+      <section className="relative py-20 overflow-hidden">
+        {/* Curved background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent">
+          <svg className="absolute top-0 left-0 w-full h-24" viewBox="0 0 1440 120" preserveAspectRatio="none">
+            <path 
+              fill="currentColor" 
+              className="text-background"
+              d="M0,0 C480,100 960,100 1440,0 L1440,120 L0,120 Z"
+            />
+          </svg>
+          <svg className="absolute bottom-0 left-0 w-full h-24" viewBox="0 0 1440 120" preserveAspectRatio="none">
+            <path 
+              fill="currentColor" 
+              className="text-background"
+              d="M0,120 C480,20 960,20 1440,120 L1440,0 L0,0 Z"
+            />
+          </svg>
+        </div>
+
+        <div className="relative max-w-7xl mx-auto px-4 md:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mb-12 text-center"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-4">
+              <TrendingUp className="w-4 h-4" />
+              <span>Trending Now</span>
+            </div>
+            <h2 className="text-3xl md:text-5xl font-display font-bold tracking-tight mb-3">
+              What's Hot This Week
+            </h2>
+            <p className="text-muted-foreground text-lg">
+              Discover what everyone's watching right now
+            </p>
+          </motion.div>
+
+          {trendingLoading ? (
+            <div className="flex gap-6 justify-center">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div 
+                  key={i} 
+                  className="flex-shrink-0 w-52 h-80 bg-card/30 rounded-2xl border border-white/5 animate-pulse"
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="relative">
+              <div 
+                ref={scrollRef}
+                className="flex gap-6 overflow-x-hidden scroll-smooth"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
+                {/* Duplicate movies for infinite loop effect */}
+                {trendingMovies && [...trendingMovies, ...trendingMovies].map((movie, idx) => (
+                  <motion.div
+                    key={`${movie.tmdbId}-${idx}`}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.3, delay: (idx % 10) * 0.05 }}
+                    className="flex-shrink-0 w-52"
+                  >
+                    <MovieCard movie={movie} delay={0} compact />
+                  </motion.div>
+                ))}
+              </div>
+              
+              {/* Gradient overlays */}
+              <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent pointer-events-none z-10" />
+              <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent pointer-events-none z-10" />
+            </div>
+          )}
+        </div>
+      </section>
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-white/5 py-12 px-6 bg-black/20 backdrop-blur-md">
