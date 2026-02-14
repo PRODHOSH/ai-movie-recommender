@@ -1,195 +1,110 @@
-# AI Movie Recommender - Frontend Only
+# 🎬 CINE-AI
 
-An AI-powered movie recommendation app that uses your mood to find perfect movies. Built with React, Supabase, TMDB API, and Gemini AI.
+> **Your mood, our AI, perfect movies.**
 
-## Features
+An AI-powered movie recommender that understands your vibe. Tell us how you feel, and we'll find the perfect movies for you.
 
-- 🎬 AI-powered movie recommendations based on your mood
-- 🔐 Supabase authentication (email/password & Google OAuth)
-- 🎥 TMDB API integration for movie data
-- 🤖 Google Gemini AI for intelligent mood analysis
-- ⭐ Save favorite movies
-- 📜 View your mood history
+![React](https://img.shields.io/badge/React-18.3.1-61DAFB?logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.6.3-3178C6?logo=typescript&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4-38B2AC?logo=tailwind-css&logoColor=white)
 
-## Setup Instructions
+## ✨ Features
 
-### 1. Install Dependencies
+- 🤖 **AI-Powered** - Gemini AI analyzes your mood
+- 🎥 **15K+ Movies** - Powered by TMDB
+- ⭐ **Save Favorites** - Build your collection
+- 📜 **Search History** - Track your vibes
+- 🔐 **Secure Auth** - Email or Google sign-in
+
+## 🚀 Quick Setup
+
+### 1. Clone & Install
 
 ```bash
+git clone <your-repo-url>
+cd ai-movie-recommender
 npm install
 ```
 
-### 2. Set Up Supabase
+### 2. Get Your API Keys
 
-**📋 Complete Setup Guide: [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)**
+| Service | Get Key | Why? |
+|---------|---------|------|
+| [Supabase](https://supabase.com) | Free account → New project → Settings/API | Auth & Database |
+| [TMDB](https://www.themoviedb.org/settings/api) | Free account → Settings/API → Request key | Movie data |
+| [Gemini](https://makersuite.google.com/app/apikey) | Google account → Get API Key | AI recommendations |
 
-Quick steps:
-1. Create account at [Supabase](https://supabase.com)
-2. Create a new project
-3. Get your Project URL and anon key from Settings > API
-4. Run the SQL commands to create tables (see full guide)
-5. Enable Google OAuth (optional but recommended)
-6. Add keys to `client/.env`
+### 3. Setup Environment
 
-**For detailed step-by-step instructions with screenshots and troubleshooting, see [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)**
-
-### 3. Get TMDB API Key
-
-1. Create a free account at [TMDB](https://www.themoviedb.org/signup)
-2. Go to Settings > API
-3. Request an API key (choose "Developer" option)
-4. Copy your API Key (v3 auth)
-
-### 4. Get Gemini API Key
-
-1. Go to [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Sign in with your Google account
-3. Click "Get API Key"
-4. Copy your API key
-
-### 5. Configure Environment Variables
-
-**Client-side variables** (exposed to browser):
-
-Copy the template:
-```bash
-cd client
-cp .env.example .env
-```
-
-Edit `client/.env`:
+Create `client/.env`:
 ```env
 VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-key-here
-VITE_TMDB_API_KEY=your-tmdb-api-key-here
+VITE_SUPABASE_ANON_KEY=your-anon-key
+VITE_TMDB_API_KEY=your-tmdb-key
 ```
 
-**Server-side variables** (kept secret):
-
-Copy the template:
-```bash
-cp .env.example .env
-```
-
-Edit root `.env`:
+Create `.env` (root):
 ```env
-GEMINI_API_KEY=your-gemini-api-key-here
+GEMINI_API_KEY=your-gemini-key
 ```
 
-**🔒 Security**: The Gemini API key is now secured in a serverless function and never exposed to the browser!
+### 4. Setup Database
 
-### 6. Run the Application
+Run this SQL in Supabase SQL Editor:
+
+```sql
+-- Favorites table
+CREATE TABLE favorites (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES auth.users NOT NULL,
+  movie_id INTEGER NOT NULL,
+  movie JSONB NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- History table
+CREATE TABLE mood_history (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES auth.users NOT NULL,
+  mood TEXT NOT NULL,
+  generated_genres JSONB,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Enable Row Level Security
+ALTER TABLE favorites ENABLE ROW LEVEL SECURITY;
+ALTER TABLE mood_history ENABLE ROW LEVEL SECURITY;
+
+-- RLS Policies
+CREATE POLICY "Users can manage their favorites"
+  ON favorites FOR ALL USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can manage their history"
+  ON mood_history FOR ALL USING (auth.uid() = user_id);
+```
+
+### 5. Run It! 🎉
 
 ```bash
 npm run dev
 ```
 
-The app will open at `http://localhost:5173`
+Visit `http://localhost:5174` and start discovering movies! 🍿
 
-## Usage
+## 📦 Deploy to Netlify
 
-1. **Sign Up/Sign In**: Create an account or sign in with Google
-2. **Enter Your Mood**: Describe how you're feeling or what you're looking for
-3. **Get Recommendations**: AI analyzes your mood and suggests movies
-4. **Save Favorites**: Click the heart icon to save movies
-5. **View History**: Check your past mood searches
+1. Push to GitHub
+2. Connect repo to [Netlify](https://netlify.com)
+3. Add environment variables (same as above)
+4. Deploy! 🚀
 
-## Tech Stack
+## 🛠 Tech Stack
 
-- **Frontend**: React + TypeScript + Vite
-- **UI**: TailwindCSS + shadcn/ui
-- **Authentication**: Supabase Auth
-- **Database**: Supabase (PostgreSQL)
-- **Movie Data**: TMDB API
-- **AI**: Google Gemini AI
-- **State Management**: TanStack Query (React Query)
+**Frontend:** React · TypeScript · Vite · TailwindCSS · Framer Motion  
+**Backend:** Supabase · Netlify Functions  
+**APIs:** TMDB · Google Gemini AI  
+**State:** TanStack Query
 
-## Project Structure
+---
 
-```
-api/
-  gemini.ts         # Vercel serverless function (Gemini API - secured)
-netlify/
-  functions/
-    gemini.ts       # Netlify serverless function (Gemini API - secured)
-client/
-  src/
-    components/     # UI components
-    hooks/          # Custom React hooks
-    lib/            # API clients (Supabase, TMDB, Gemini)
-    pages/          # Page components
-  .env              # Client environment variables
-.env                # Server environment variables (API keys)
-netlify.toml        # Netlify configuration
-```
-
-## Deployment
-
-### Deploy to Netlify (Recommended)
-
-The project is pre-configured with `netlify.toml` for easy deployment:
-
-1. Push your code to GitHub
-2. Go to [Netlify](https://app.netlify.com)
-3. Click "Add new site" → "Import an existing project"
-4. Connect your GitHub repository
-5. Netlify will auto-detect the `netlify.toml` configuration
-6. Add environment variables in Site settings → Environment variables:
-   - `VITE_SUPABASE_URL` - Your Supabase project URL
-   - `VITE_SUPABASE_ANON_KEY` - Your Supabase anon key
-   - `VITE_TMDB_API_KEY` - Your TMDB API key
-   - `GEMINI_API_KEY` - Your Gemini API key (server-side only)
-7. Deploy!
-
-**Note**: The serverless function in `netlify/functions/gemini.ts` keeps your Gemini API key secure on the server.
-
-### Deploy to Vercel (Alternative)
-
-1. Push your code to GitHub
-2. Go to [Vercel](https://vercel.com)
-3. Import your repository
-4. Add environment variables:
-   - **Root Project Settings**:
-     - `GEMINI_API_KEY` - Your Gemini API key (server-side)
-   - **Client Settings** (if needed):
-     - `VITE_SUPABASE_URL`
-     - `VITE_SUPABASE_ANON_KEY`
-     - `VITE_TMDB_API_KEY`
-5. Deploy!
-
-**Note**: The serverless function in `api/gemini.ts` keeps your Gemini API key secure on the server.
-
-## API Rate Limits
-
-- **TMDB**: 40 requests per 10 seconds (free tier)
-- **Gemini**: 60 requests per minute (free tier)
-- **Supabase**: Generous free tier limits
-
-## Troubleshooting
-
-### "Missing Supabase environment variables"
-- Make sure you created `client/.env` file
-- Check that the values are correct (no extra spaces)
-
-### "Failed to fetch recommendations"
-- Verify your TMDB API key is valid
-- Check your Gemini API key
-- Open browser console for detailed errors
-
-### Authentication not working
-- Verify Supabase URL and anon key
-- Check that you created the database tables
-- Ensure RLS policies are enabled
-
-### Movies not saving to favorites
-- Make sure you're logged in
-- Check that database tables exist
-- Verify RLS policies are set up correctly
-
-## Contributing
-
-Feel free to submit issues and enhancement requests!
-
-## License
-
-MIT
+Made with ❤️ for movie lovers
