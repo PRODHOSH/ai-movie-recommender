@@ -14,7 +14,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row">
+    <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row overflow-x-hidden">
       {/* Mobile Header */}
       <div className="md:hidden flex items-center justify-between p-4 glass sticky top-0 z-50">
         <div className="flex items-center gap-2 text-primary">
@@ -73,7 +73,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 md:ml-64 p-4 md:p-8 lg:p-12 max-w-[1600px] mx-auto w-full">
+      <main className="flex-1 md:ml-64 p-4 md:p-8 lg:p-12 max-w-[1600px] mx-auto w-full overflow-x-hidden">
         {children}
       </main>
 

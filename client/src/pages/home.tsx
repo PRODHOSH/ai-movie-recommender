@@ -141,10 +141,10 @@ export default function HomePage() {
               ))}
             </div>
           ) : (
-            <div className="relative overflow-hidden -mx-4 md:-mx-8 lg:-mx-12">
+            <div className="relative overflow-hidden">
               <div 
                 ref={scrollRef}
-                className="flex gap-6 overflow-x-hidden px-4 md:px-8 lg:px-12"
+                className="flex gap-6 overflow-x-hidden"
                 style={{ 
                   scrollbarWidth: 'none', 
                   msOverflowStyle: 'none',
