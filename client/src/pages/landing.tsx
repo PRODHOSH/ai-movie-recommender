@@ -374,35 +374,35 @@ export default function LandingPage() {
       )}
 
       {/* Hero */}
-      <main className="relative z-10 flex flex-col items-center justify-center flex-1 px-4 md:px-12 max-w-7xl mx-auto py-20 w-full">
-        <div className="grid md:grid-cols-2 gap-12 items-center w-full">
+      <main className="relative z-10 flex flex-col items-center justify-center flex-1 px-6 md:px-12 max-w-7xl mx-auto py-16 md:py-24 w-full">
+        <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center w-full">
           {/* Left: Hero Content */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="space-y-8"
+            className="space-y-6 md:space-y-8"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/15 border border-primary/30 text-primary text-xs md:text-sm font-semibold backdrop-blur-sm">
               <Sparkles className="w-4 h-4" />
               <span>AI-Powered Recommendations</span>
             </div>
 
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-bold tracking-tight leading-[1.1]">
-              <span className="block text-white">Discover Movies</span>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display font-bold tracking-tight leading-[1.15]">
+              <span className="block text-white mb-2">Discover Movies</span>
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-400 to-blue-500">
-                Matches Your Mood
+                That Match Your Mood
               </span>
             </h1>
 
-            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed">
+            <p className="text-base md:text-lg text-gray-300 max-w-xl leading-relaxed">
               Stop scrolling for hours. Tell us how you feel, and our AI will curate the perfect watchlist for your current vibe.
             </p>
 
-            <div className="pt-8 flex flex-col sm:flex-row items-start gap-4">
+            <div className="pt-4 flex flex-col sm:flex-row items-start gap-4">
               <button
                 onClick={() => { setShowAuth(true); setIsSignUp(true); }}
-                className="group inline-flex items-center gap-3 px-8 py-4 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-semibold shadow-lg shadow-primary/25 transition-all duration-300 hover:scale-105"
+                className="group inline-flex items-center gap-3 px-8 py-4 rounded-full bg-primary hover:bg-primary/90 text-white text-base md:text-lg font-semibold shadow-lg shadow-primary/20 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/30"
               >
                 Get Started
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -415,69 +415,71 @@ export default function LandingPage() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-            className="hidden md:block"
+            className="hidden md:flex justify-center items-center"
           >
             {trendingLoading ? (
-              <div className="w-full h-[600px] bg-card/30 rounded-3xl border border-white/10 animate-pulse" />
+              <div className="w-full max-w-md h-[550px] bg-card/30 rounded-2xl border border-white/10 animate-pulse" />
             ) : trendingMovies && trendingMovies.length > 0 && (
               <motion.div
                 key={featuredMovieIndex}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
                 onClick={() => setSelectedMovie(trendingMovies[featuredMovieIndex])}
-                className="relative group cursor-pointer overflow-hidden rounded-3xl border border-white/10 shadow-2xl hover:shadow-primary/20 transition-all duration-500 hover:scale-[1.02]"
+                className="relative group cursor-pointer overflow-hidden rounded-2xl border-2 border-white/20 shadow-2xl hover:border-primary/50 transition-all duration-500 hover:scale-[1.02] w-full max-w-md"
               >
-                <div className="relative h-[600px]">
+                <div className="relative h-[550px]">
                   <img
                     src={`https://image.tmdb.org/t/p/w500${trendingMovies[featuredMovieIndex].posterPath}`}
                     alt={trendingMovies[featuredMovieIndex].title}
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+                  {/* Enhanced gradient for maximum text visibility */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
                   
                   {/* Movie Info Overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 p-8 space-y-4">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/20 border border-primary/40 text-primary text-xs font-medium backdrop-blur-sm">
-                      <TrendingUp className="w-3 h-3" />
-                      <span>Top Trending #{featuredMovieIndex + 1}</span>
+                  <div className="absolute bottom-0 left-0 right-0 p-6 space-y-3">
+                    {/* Top Trending Badge */}
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/40 border-2 border-primary/80 backdrop-blur-xl shadow-lg">
+                      <TrendingUp className="w-3.5 h-3.5 text-white" />
+                      <span className="text-white text-xs font-bold uppercase tracking-wide">Top Trending #{featuredMovieIndex + 1}</span>
                     </div>
                     
-                    <h3 className="text-3xl font-bold text-white leading-tight">
+                    {/* Movie Title */}
+                    <h3 className="text-3xl font-black text-white leading-tight" style={{ textShadow: '0 2px 20px rgba(0,0,0,0.9), 0 0 40px rgba(0,0,0,0.5)' }}>
                       {trendingMovies[featuredMovieIndex].title}
                     </h3>
                     
-                    <div className="flex items-center gap-4 text-sm text-white/80">
-                      <div className="flex items-center gap-1">
-                        <span className="text-yellow-400">★</span>
-                        <span className="font-semibold">{trendingMovies[featuredMovieIndex].voteAverage?.toFixed(1) || 'N/A'}</span>
+                    {/* Rating and Year */}
+                    <div className="flex items-center gap-3 text-sm">
+                      <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black/80 backdrop-blur-sm border border-yellow-400/30">
+                        <span className="text-yellow-400 text-base">★</span>
+                        <span className="font-bold text-white">{trendingMovies[featuredMovieIndex].voteAverage?.toFixed(1) || 'N/A'}</span>
                       </div>
                       {trendingMovies[featuredMovieIndex].releaseDate && (
-                        <span>{trendingMovies[featuredMovieIndex].releaseDate.split('-')[0]}</span>
+                        <div className="px-3 py-1.5 rounded-lg bg-black/80 backdrop-blur-sm border border-white/30">
+                          <span className="font-bold text-white">{trendingMovies[featuredMovieIndex].releaseDate.split('-')[0]}</span>
+                        </div>
                       )}
                     </div>
                     
+                    {/* Genres */}
                     {trendingMovies[featuredMovieIndex].genres && trendingMovies[featuredMovieIndex].genres.length > 0 && (
                       <div className="flex flex-wrap gap-2">
                         {trendingMovies[featuredMovieIndex].genres.slice(0, 3).map((genre: string, idx: number) => (
                           <span
                             key={idx}
-                            className="px-3 py-1 rounded-full bg-white/10 border border-white/20 text-white text-xs backdrop-blur-sm"
+                            className="px-3 py-1 rounded-full bg-white/25 border border-white/50 text-white text-xs font-bold backdrop-blur-sm"
                           >
                             {genre}
                           </span>
                         ))}
                       </div>
                     )}
-                    
-                    <p className="text-sm text-white/70 line-clamp-3 leading-relaxed">
-                      {trendingMovies[featuredMovieIndex].overview}
-                    </p>
                   </div>
                   
                   {/* Hover overlay */}
-                  <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
               </motion.div>
             )}
