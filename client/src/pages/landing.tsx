@@ -128,11 +128,11 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="min-h-screen text-foreground relative overflow-hidden flex flex-col" style={{ background: 'linear-gradient(to bottom, #0a0015, #1a0b2e, #16001e)' }}>
+    <div className="min-h-screen text-foreground relative overflow-hidden flex flex-col" style={{ background: '#000000' }}>
       {/* Animated Background */}
       <div className="fixed inset-0 z-0 w-full h-full overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0015] via-[#1a0b2e] to-[#16001e]" />
-        <div className="absolute inset-0 opacity-30">
+        <div className="absolute inset-0 bg-black" />
+        <div className="absolute inset-0 opacity-20">
           <div className="absolute top-[10%] left-[20%] w-[600px] h-[600px] bg-purple-600/40 rounded-full blur-[120px] animate-pulse" />
           <div className="absolute top-[40%] right-[15%] w-[500px] h-[500px] bg-blue-600/30 rounded-full blur-[100px] animate-pulse" style={{animationDelay: '2s'}} />
           <div className="absolute bottom-[20%] left-[40%] w-[400px] h-[400px] bg-pink-600/30 rounded-full blur-[80px] animate-pulse" style={{animationDelay: '4s'}} />
@@ -140,7 +140,7 @@ export default function LandingPage() {
       </div>
 
       {/* Nav */}
-      <nav className="relative z-10 flex items-center justify-between px-6 py-6 md:px-12 max-w-7xl mx-auto w-full">
+      <nav className="relative z-10 flex items-center justify-between px-6 py-6 md:px-12 max-w-7xl mx-auto w-full bg-black border-b border-white/10">
         <div className="flex items-center gap-2 text-primary">
           <img src="/favicon.png" alt="CINE-AI" className="w-9 h-9" />
           <span className="font-display font-bold text-2xl tracking-wide">CINE-AI</span>
@@ -341,54 +341,33 @@ export default function LandingPage() {
             </div>
           ) : (
             <div className="relative overflow-hidden">
-              {/* Circular path container */}
+              {/* Straight horizontal scroll */}
               <div 
                 ref={scrollRef}
-                className="flex gap-8 overflow-x-hidden"
+                className="flex gap-8 overflow-x-hidden items-center py-8"
                 style={{ 
                   scrollbarWidth: 'none', 
-                  msOverflowStyle: 'none',
-                  height: '500px',
-                  alignItems: 'center',
-                  paddingTop: '100px'
+                  msOverflowStyle: 'none'
                 }}
               >
                 {/* Duplicate movies 3 times for seamless infinite loop */}
-                {trendingMovies && [...trendingMovies, ...trendingMovies, ...trendingMovies].map((movie, idx) => {
-                  // Calculate position in the circular path (0 to 1)
-                  const totalMovies = trendingMovies.length * 3;
-                  const position = idx / totalMovies;
-                  
-                  // Create circular motion using sine and cosine
-                  // Full circle path with smooth curves
-                  const angle = position * Math.PI * 6; // Multiple rotations for smooth effect
-                  const verticalOffset = Math.sin(angle) * 80; // Up and down movement
-                  const scale = 0.8 + (Math.cos(angle) * 0.2); // Size variation for depth
-                  const rotation = Math.sin(angle) * 8; // Slight rotation for 3D effect
-                  
-                  return (
-                    <motion.div
-                      key={`${movie.tmdbId}-${idx}`}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.3, delay: (idx % 10) * 0.03 }}
-                      className="flex-shrink-0 w-52"
-                      style={{
-                        transform: `translateY(${verticalOffset}px) scale(${scale}) rotate(${rotation}deg)`,
-                        transition: 'transform 0.3s ease-out',
-                        zIndex: Math.floor(scale * 10)
-                      }}
-                    >
-                      <MovieCard movie={movie} delay={0} compact />
-                    </motion.div>
-                  );
-                })}
+                {trendingMovies && [...trendingMovies, ...trendingMovies, ...trendingMovies].map((movie, idx) => (
+                  <motion.div
+                    key={`${movie.tmdbId}-${idx}`}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.3, delay: (idx % 10) * 0.03 }}
+                    className="flex-shrink-0 w-52"
+                  >
+                    <MovieCard movie={movie} delay={0} compact />
+                  </motion.div>
+                ))}
               </div>
               
               {/* Gradient overlays */}
-              <div className="absolute left-0 top-0 bottom-0 w-40 bg-gradient-to-r from-background via-background/80 to-transparent pointer-events-none z-10" />
-              <div className="absolute right-0 top-0 bottom-0 w-40 bg-gradient-to-l from-background via-background/80 to-transparent pointer-events-none z-10" />
+              <div className="absolute left-0 top-0 bottom-0 w-40 bg-gradient-to-r from-black via-black/80 to-transparent pointer-events-none z-10" />
+              <div className="absolute right-0 top-0 bottom-0 w-40 bg-gradient-to-l from-black via-black/80 to-transparent pointer-events-none z-10" />
             </div>
           )}
         </div>

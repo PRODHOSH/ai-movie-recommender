@@ -14,10 +14,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row overflow-x-hidden relative" style={{ background: 'linear-gradient(to bottom, #0a0015, #1a0b2e, #16001e)' }}>
+    <div className="min-h-screen bg-background text-foreground flex flex-col md:flex-row overflow-x-hidden relative" style={{ background: '#000000' }}>
       {/* Animated Background */}
       <div className="fixed inset-0 z-0 w-full h-full overflow-hidden">
-        <div className="absolute inset-0 opacity-30">
+        <div className="absolute inset-0 bg-black" />
+        <div className="absolute inset-0 opacity-20">
           <div className="absolute top-[10%] left-[20%] w-[600px] h-[600px] bg-purple-600/40 rounded-full blur-[120px] animate-pulse" />
           <div className="absolute top-[40%] right-[15%] w-[500px] h-[500px] bg-blue-600/30 rounded-full blur-[100px] animate-pulse" style={{animationDelay: '2s'}} />
           <div className="absolute bottom-[20%] left-[40%] w-[400px] h-[400px] bg-pink-600/30 rounded-full blur-[80px] animate-pulse" style={{animationDelay: '4s'}} />
@@ -25,7 +26,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Mobile Header */}
-      <div className="md:hidden flex items-center justify-between p-4 glass sticky top-0 z-50">
+      <div className="md:hidden flex items-center justify-between p-4 bg-black border-b border-white/10 sticky top-0 z-50">
         <div className="flex items-center gap-2 text-primary">
           <img src="/favicon.png" alt="CINE-AI" className="w-7 h-7" />
           <span className="font-display font-bold text-lg tracking-wide">CINE-AI</span>
@@ -36,7 +37,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Sidebar Navigation */}
-      <aside className="hidden md:flex flex-col w-64 fixed h-screen glass border-r border-white/5 z-40">
+      <aside className="hidden md:flex flex-col w-64 fixed h-screen bg-black border-r border-white/10 z-40">
         <div className="p-8">
           <div className="flex items-center gap-3 text-primary mb-10">
             <img src="/favicon.png" alt="CINE-AI" className="w-9 h-9" />
@@ -87,7 +88,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </main>
 
       {/* Mobile Bottom Nav */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 glass border-t border-white/5 flex justify-around p-4 z-50">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-black border-t border-white/10 flex justify-around p-4 z-50">
         {navItems.map((item) => {
           const isActive = location === item.href;
           return (
