@@ -1,9 +1,77 @@
-import { Sparkles, Film, ArrowRight, Github } from "lucide-react";
+import { Sparkles, Film, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/lib/supabase";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
+import { useLocation } from "wouter";
 
 export default function LandingPage() {
   const { user } = useAuth();
+  const [, setLocation] = useLocation();
+  const { toast } = useToast();
+  const [showAuth, setShowAuth] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      if (isSignUp) {
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+        });
+        if (error) throw error;
+        toast({
+          title: "Success!",
+          description: "Check your email for verification link.",
+        });
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (error) throw error;
+        setLocation("/");
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.origin,
+      },
+    });
+    if (error) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  if (user) {
+    setLocation("/");
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground relative overflow-hidden flex flex-col">
@@ -20,20 +88,84 @@ export default function LandingPage() {
           <span className="font-display font-bold text-2xl tracking-wide">CINE-AI</span>
         </div>
         <div className="flex items-center gap-4">
-          <a 
-            href="/api/login"
+          <button 
+            onClick={() => { setShowAuth(true); setIsSignUp(false); }}
             className="px-6 py-2.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-sm font-semibold transition-colors backdrop-blur-sm"
           >
             Sign In
-          </a>
-          <a 
-            href="/api/login"
+          </button>
+          <button 
+            onClick={() => { setShowAuth(true); setIsSignUp(true); }}
             className="px-6 py-2.5 rounded-full bg-primary/10 hover:bg-primary/20 border border-primary/20 text-sm font-semibold text-primary transition-colors backdrop-blur-sm"
           >
-            Demo Login
-          </a>
+            Sign Up
+          </button>
         </div>
       </nav>
+
+      {/* Auth Modal */}
+      {showAuth && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm" onClick={() => setShowAuth(false)}>
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-card border border-white/10 rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl"
+          >
+            <h2 className="text-2xl font-bold mb-6">{isSignUp ? 'Create Account' : 'Welcome Back'}</h2>
+            
+            <form onSubmit={handleAuth} className="space-y-4">
+              <div>
+                <Input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full"
+                />
+              </div>
+              <div>
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="w-full"
+                />
+              </div>
+              <Button type="submit" disabled={loading} className="w-full">
+                {loading ? "Loading..." : isSignUp ? "Sign Up" : "Sign In"}
+              </Button>
+            </form>
+
+            <div className="mt-6 flex items-center gap-4">
+              <div className="flex-1 h-px bg-white/10" />
+              <span className="text-xs text-muted-foreground">OR</span>
+              <div className="flex-1 h-px bg-white/10" />
+            </div>
+
+            <Button
+              onClick={handleGoogleLogin}
+              variant="outline"
+              className="w-full mt-4"
+            >
+              Continue with Google
+            </Button>
+
+            <p className="text-center text-sm text-muted-foreground mt-6">
+              {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
+              <button
+                onClick={() => setIsSignUp(!isSignUp)}
+                className="text-primary hover:underline"
+              >
+                {isSignUp ? 'Sign In' : 'Sign Up'}
+              </button>
+            </p>
+          </motion.div>
+        </div>
+      )}
 
       {/* Hero */}
       <main className="relative z-10 flex flex-col items-center justify-center flex-1 px-4 text-center max-w-5xl mx-auto py-20">
@@ -60,13 +192,13 @@ export default function LandingPage() {
           </p>
 
           <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href="/api/login"
+            <button
+              onClick={() => { setShowAuth(true); setIsSignUp(true); }}
               className="group inline-flex items-center gap-3 px-8 py-4 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-semibold shadow-lg shadow-primary/25 transition-all duration-300 hover:scale-105"
             >
               Get Started
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </a>
+            </button>
           </div>
         </motion.div>
         
