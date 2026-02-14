@@ -97,6 +97,21 @@ export function useRecommendations(mood?: string) {
   });
 }
 
+// Trending Movies Hook
+export function useTrendingMovies() {
+  return useQuery({
+    queryKey: ["trending-movies"],
+    queryFn: async () => {
+      const genres = await tmdbClient.getGenres();
+      const genreMap = new Map(genres.map(g => [g.id, g.name]));
+      
+      const tmdbMovies = await tmdbClient.getTrendingMovies('week');
+      return tmdbMovies.slice(0, 10).map(m => tmdbToMovie(m, genreMap));
+    },
+    staleTime: 1000 * 60 * 30, // 30 minutes - trending doesn't change that fast
+  });
+}
+
 // Favorites Hooks
 export function useFavorites() {
   const { user } = useAuth();

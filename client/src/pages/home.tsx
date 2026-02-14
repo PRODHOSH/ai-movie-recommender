@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useRecommendations } from "@/hooks/use-movies";
+import { useRecommendations, useTrendingMovies } from "@/hooks/use-movies";
 import { MovieCard } from "@/components/movie-card";
-import { Sparkles, Search, Loader2 } from "lucide-react";
+import { Sparkles, Search, Loader2, TrendingUp } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function HomePage() {
@@ -9,6 +9,7 @@ export default function HomePage() {
   const [queryMood, setQueryMood] = useState("");
   
   const { data, isLoading, isError } = useRecommendations(queryMood || undefined);
+  const { data: trendingMovies, isLoading: trendingLoading } = useTrendingMovies();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,6 +69,76 @@ export default function HomePage() {
           </div>
         </motion.form>
       </section>
+
+      {/* Trending Movies Section with Curved Design */}
+      {!queryMood && (
+        <section className="relative py-16 -mx-4 md:-mx-8 lg:-mx-12">
+          {/* Curved background */}
+          <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-primary/10 to-transparent">
+            <svg className="absolute top-0 left-0 w-full" viewBox="0 0 1440 120" preserveAspectRatio="none">
+              <path 
+                fill="currentColor" 
+                className="text-background"
+                d="M0,0 C480,120 960,120 1440,0 L1440,120 L0,120 Z"
+              />
+            </svg>
+            <svg className="absolute bottom-0 left-0 w-full" viewBox="0 0 1440 120" preserveAspectRatio="none">
+              <path 
+                fill="currentColor" 
+                className="text-background"
+                d="M0,120 C480,0 960,0 1440,120 L1440,0 L0,0 Z"
+              />
+            </svg>
+          </div>
+
+          <div className="relative px-4 md:px-8 lg:px-12 max-w-7xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="mb-8 text-center"
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-4">
+                <TrendingUp className="w-4 h-4" />
+                <span>Trending Now</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-display font-bold tracking-tight">
+                What's Hot This Week
+              </h2>
+              <p className="text-muted-foreground mt-2">
+                Discover what everyone's watching right now
+              </p>
+            </motion.div>
+
+            {trendingLoading ? (
+              <div className="flex gap-4 overflow-hidden">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <div 
+                    key={i} 
+                    className="flex-shrink-0 w-48 h-72 bg-card/50 rounded-2xl border border-white/5 animate-pulse"
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="relative">
+                <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent hover:scrollbar-thumb-primary/40">
+                  {trendingMovies?.map((movie, idx) => (
+                    <motion.div
+                      key={movie.tmdbId}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.3, delay: idx * 0.05 }}
+                      className="flex-shrink-0 w-48"
+                    >
+                      <MovieCard movie={movie} delay={0} compact />
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* Results Section */}
       <section className="space-y-8 min-h-[400px]">

@@ -1,5 +1,5 @@
 import { Heart, Star, Calendar } from "lucide-react";
-import { Movie, InsertMovie } from "@shared/schema";
+import type { Movie } from "@/hooks/use-movies";
 import { useAddFavorite, useRemoveFavorite, useFavorites } from "@/hooks/use-movies";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
@@ -7,9 +7,10 @@ import { motion } from "framer-motion";
 interface MovieCardProps {
   movie: Movie;
   delay?: number;
+  compact?: boolean;
 }
 
-export function MovieCard({ movie, delay = 0 }: MovieCardProps) {
+export function MovieCard({ movie, delay = 0, compact = false }: MovieCardProps) {
   const { data: favorites } = useFavorites();
   const addFavorite = useAddFavorite();
   const removeFavorite = useRemoveFavorite();
@@ -27,23 +28,63 @@ export function MovieCard({ movie, delay = 0 }: MovieCardProps) {
     if (isFavorite && favoriteEntry) {
       removeFavorite.mutate(favoriteEntry.id);
     } else {
-      // Prepare insert object (omit id)
-      const movieToInsert: InsertMovie = {
-        tmdbId: movie.tmdbId,
-        title: movie.title,
-        overview: movie.overview,
-        posterPath: movie.posterPath,
-        backdropPath: movie.backdropPath,
-        releaseDate: movie.releaseDate,
-        voteAverage: movie.voteAverage,
-      };
-      addFavorite.mutate(movieToInsert);
+      addFavorite.mutate(movie);
     }
   };
 
   const posterUrl = movie.posterPath
     ? `https://image.tmdb.org/t/p/w500${movie.posterPath}`
-    : "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=500&h=750&fit=crop"; // Abstract cinema fallback
+    : "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=500&h=750&fit=crop";
+
+  if (compact) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3, delay }}
+        className="group relative bg-card rounded-xl overflow-hidden shadow-lg hover:shadow-xl hover:shadow-primary/20 border border-white/5 hover:border-primary/50 transition-all duration-300"
+      >
+        <div className="aspect-[2/3] w-full relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10" />
+          <img
+            src={posterUrl}
+            alt={movie.title}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            loading="lazy"
+          />
+          
+          <button
+            onClick={handleToggleFavorite}
+            disabled={addFavorite.isPending || removeFavorite.isPending}
+            className="absolute top-2 right-2 z-20 p-2 rounded-full glass hover:bg-white/20 transition-all duration-200 active:scale-95"
+          >
+            <Heart
+              className={cn(
+                "w-4 h-4 transition-colors duration-300",
+                isFavorite ? "fill-red-500 text-red-500" : "text-white"
+              )}
+            />
+          </button>
+
+          <div className="absolute top-2 left-2 z-20 px-2 py-1 rounded-full glass flex items-center gap-1">
+            <Star className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+            <span className="text-xs font-bold text-white">
+              {Number(movie.voteAverage).toFixed(1)}
+            </span>
+          </div>
+
+          <div className="absolute bottom-0 left-0 right-0 z-20 p-3">
+            <h3 className="font-display font-bold text-sm leading-tight text-white line-clamp-2">
+              {movie.title}
+            </h3>
+            <span className="text-xs text-white/70 mt-1 block">
+              {movie.releaseDate?.split("-")[0] || "Unknown"}
+            </span>
+          </div>
+        </div>
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div

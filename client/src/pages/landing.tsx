@@ -84,7 +84,7 @@ export default function LandingPage() {
       {/* Nav */}
       <nav className="relative z-10 flex items-center justify-between px-6 py-6 md:px-12 max-w-7xl mx-auto w-full">
         <div className="flex items-center gap-2 text-primary">
-          <Film className="w-8 h-8" />
+          <img src="/favicon.png" alt="CINE-AI" className="w-9 h-9" />
           <span className="font-display font-bold text-2xl tracking-wide">CINE-AI</span>
         </div>
         <div className="flex items-center gap-4">
@@ -125,7 +125,7 @@ export default function LandingPage() {
 
             <div className="text-center mb-8">
               <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-primary/10 border border-primary/20 mb-4">
-                <Film className="w-7 h-7 text-primary" />
+                <img src="/favicon.png" alt="CINE-AI" className="w-8 h-8" />
               </div>
               <h2 className="text-3xl font-bold mb-2">{isSignUp ? 'Join CINE-AI' : 'Welcome Back'}</h2>
               <p className="text-sm text-muted-foreground">
@@ -275,7 +275,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-primary">
-              <Film className="w-6 h-6" />
+              <img src="/favicon.png" alt="CINE-AI" className="w-7 h-7" />
               <span className="font-display font-bold text-xl tracking-wide">CINE-AI</span>
             </div>
             <p className="text-sm text-muted-foreground">
