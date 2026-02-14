@@ -29,7 +29,7 @@ export default function LandingPage() {
 
     let animationFrameId: number;
     let scrollPos = 0;
-    const scrollSpeed = 1; // pixels per frame
+    const scrollSpeed = 1.5; // Increased speed
     
     const autoScroll = () => {
       if (scrollContainer) {
@@ -354,29 +354,42 @@ export default function LandingPage() {
               ))}
             </div>
           ) : (
-            <div className="relative">
+            <div className="relative overflow-hidden">
+              {/* Curved path container */}
               <div 
                 ref={scrollRef}
-                className="flex gap-6 overflow-x-hidden scroll-smooth py-8"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                className="flex gap-6 overflow-x-hidden"
+                style={{ 
+                  scrollbarWidth: 'none', 
+                  msOverflowStyle: 'none',
+                  height: '450px',
+                  alignItems: 'flex-start'
+                }}
               >
                 {/* Duplicate movies 3 times for seamless infinite loop */}
-                {trendingMovies && [...trendingMovies, ...trendingMovies, ...trendingMovies].map((movie, idx) => (
-                  <motion.div
-                    key={`${movie.tmdbId}-${idx}`}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.3, delay: (idx % 10) * 0.03 }}
-                    className="flex-shrink-0 w-52"
-                    style={{
-                      animation: `wave 3s ease-in-out infinite`,
-                      animationDelay: `${idx * 0.2}s`
-                    }}
-                  >
-                    <MovieCard movie={movie} delay={0} compact />
-                  </motion.div>
-                ))}
+                {trendingMovies && [...trendingMovies, ...trendingMovies, ...trendingMovies].map((movie, idx) => {
+                  // Calculate position in the curve
+                  const position = (idx % (trendingMovies.length * 3)) / (trendingMovies.length * 3);
+                  // Create downward arc using sine wave
+                  const verticalOffset = Math.sin(position * Math.PI * 4) * 60 + 60;
+                  
+                  return (
+                    <motion.div
+                      key={`${movie.tmdbId}-${idx}`}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.3, delay: (idx % 10) * 0.03 }}
+                      className="flex-shrink-0 w-52"
+                      style={{
+                        marginTop: `${verticalOffset}px`,
+                        transition: 'margin-top 0.3s ease-out'
+                      }}
+                    >
+                      <MovieCard movie={movie} delay={0} compact />
+                    </motion.div>
+                  );
+                })}
               </div>
               
               {/* Gradient overlays */}
@@ -385,24 +398,6 @@ export default function LandingPage() {
             </div>
           )}
         </div>
-
-        {/* CSS for wave animation */}
-        <style>{`
-          @keyframes wave {
-            0%, 100% {
-              transform: translateY(0px) rotate(0deg);
-            }
-            25% {
-              transform: translateY(-15px) rotate(2deg);
-            }
-            50% {
-              transform: translateY(-25px) rotate(0deg);
-            }
-            75% {
-              transform: translateY(-15px) rotate(-2deg);
-            }
-          }
-        `}</style>
       </section>
 
       {/* Footer */}
