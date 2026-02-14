@@ -9,7 +9,7 @@ import { GoogleGenAI } from "@google/genai";
 // Initialize Gemini
 // Using the env vars provided by Replit AI Integrations
 const genAI = new GoogleGenAI({
-  apiKey: process.env.AI_INTEGRATIONS_GEMINI_API_KEY || "dummy",
+  apiKey: process.env.GOOGLE_API_KEY || process.env.AI_INTEGRATIONS_GEMINI_API_KEY || "dummy",
   httpOptions: {
     apiVersion: "",
     baseUrl: process.env.AI_INTEGRATIONS_GEMINI_BASE_URL,

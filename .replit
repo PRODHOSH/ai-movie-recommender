@@ -40,3 +40,8 @@ waitForPort = 5000
 
 [agent]
 integrations = ["javascript_gemini_ai_integrations:2.0.0", "javascript_log_in_with_replit:2.0.0"]
+
+[userenv]
+
+[userenv.shared]
+TMDB_API_KEY = "31da11c1ebcc24a43b55f3289045a052"

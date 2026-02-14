@@ -1,9 +1,12 @@
-import { Sparkles, Film, ArrowRight } from "lucide-react";
+import { Sparkles, Film, ArrowRight, Github } from "lucide-react";
 import { motion } from "framer-motion";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function LandingPage() {
+  const { user } = useAuth();
+
   return (
-    <div className="min-h-screen bg-background text-foreground relative overflow-hidden">
+    <div className="min-h-screen bg-background text-foreground relative overflow-hidden flex flex-col">
       {/* Background Gradients */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
         <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-primary/20 blur-[120px] rounded-full animate-pulse" />
@@ -11,21 +14,29 @@ export default function LandingPage() {
       </div>
 
       {/* Nav */}
-      <nav className="relative z-10 flex items-center justify-between px-6 py-6 md:px-12 max-w-7xl mx-auto">
+      <nav className="relative z-10 flex items-center justify-between px-6 py-6 md:px-12 max-w-7xl mx-auto w-full">
         <div className="flex items-center gap-2 text-primary">
           <Film className="w-8 h-8" />
           <span className="font-display font-bold text-2xl tracking-wide">CINE-AI</span>
         </div>
-        <a 
-          href="/api/login"
-          className="px-6 py-2.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-sm font-semibold transition-colors backdrop-blur-sm"
-        >
-          Sign In
-        </a>
+        <div className="flex items-center gap-4">
+          <a 
+            href="/api/login"
+            className="px-6 py-2.5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-sm font-semibold transition-colors backdrop-blur-sm"
+          >
+            Sign In
+          </a>
+          <a 
+            href="/api/login"
+            className="px-6 py-2.5 rounded-full bg-primary/10 hover:bg-primary/20 border border-primary/20 text-sm font-semibold text-primary transition-colors backdrop-blur-sm"
+          >
+            Demo Login
+          </a>
+        </div>
       </nav>
 
       {/* Hero */}
-      <main className="relative z-10 flex flex-col items-center justify-center min-h-[80vh] px-4 text-center max-w-5xl mx-auto">
+      <main className="relative z-10 flex flex-col items-center justify-center flex-1 px-4 text-center max-w-5xl mx-auto py-20">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -48,7 +59,7 @@ export default function LandingPage() {
             Stop scrolling for hours. Tell us how you feel, and our AI will curate the perfect watchlist for your current vibe.
           </p>
 
-          <div className="pt-8">
+          <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
               href="/api/login"
               className="group inline-flex items-center gap-3 px-8 py-4 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-semibold shadow-lg shadow-primary/25 transition-all duration-300 hover:scale-105"
@@ -59,36 +70,70 @@ export default function LandingPage() {
           </div>
         </motion.div>
         
-        {/* Abstract Floating Cards Visual */}
-        <div className="relative w-full max-w-4xl h-64 mt-20 hidden md:block">
-           <motion.div 
-             initial={{ opacity: 0, rotate: -10, y: 100 }}
-             animate={{ opacity: 0.5, rotate: -6, y: 0 }}
-             transition={{ delay: 0.3, duration: 1 }}
-             className="absolute left-10 top-0 w-48 h-72 bg-gray-800 rounded-2xl border border-white/10 shadow-2xl"
-           />
-           <motion.div 
-             initial={{ opacity: 0, rotate: 10, y: 100 }}
-             animate={{ opacity: 0.5, rotate: 6, y: 0 }}
-             transition={{ delay: 0.5, duration: 1 }}
-             className="absolute right-10 top-10 w-48 h-72 bg-gray-800 rounded-2xl border border-white/10 shadow-2xl"
-           />
-           <motion.div 
-             initial={{ opacity: 0, y: 100 }}
-             animate={{ opacity: 1, y: 20 }}
-             transition={{ delay: 0.7, duration: 1 }}
-             className="absolute left-1/2 -translate-x-1/2 top-[-20px] w-56 h-80 bg-card rounded-2xl border border-white/20 shadow-2xl flex items-center justify-center"
-           >
-             <div className="text-center p-6">
-                <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Film className="w-8 h-8 text-primary" />
-                </div>
-                <div className="h-2 w-24 bg-white/10 rounded-full mx-auto mb-2" />
-                <div className="h-2 w-16 bg-white/10 rounded-full mx-auto" />
-             </div>
-           </motion.div>
+        {/* Visual Showcase */}
+        <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-4xl opacity-50">
+           {[
+             "https://image.tmdb.org/t/p/w500/8Gxv8Z7R9G9tuz97I3ORv2Lyd9n.jpg",
+             "https://image.tmdb.org/t/p/w500/q719jsmZcy61BDs616C0p9gJmOq.jpg",
+             "https://image.tmdb.org/t/p/w500/t6SnaqvihT2uB9vSlpS1iQClS8S.jpg",
+             "https://image.tmdb.org/t/p/w500/ldfCF96R1NNmIoeH0rSTpZaqTvS.jpg"
+           ].map((src, i) => (
+             <motion.div 
+               key={i}
+               initial={{ opacity: 0, y: 50 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ delay: 0.1 * i, duration: 0.5 }}
+               className="aspect-[2/3] rounded-xl overflow-hidden border border-white/10"
+             >
+               <img src={src} alt="Movie Poster" className="w-full h-full object-cover" />
+             </motion.div>
+           ))}
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="relative z-10 border-t border-white/5 py-12 px-6 bg-black/20 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-primary">
+              <Film className="w-6 h-6" />
+              <span className="font-display font-bold text-xl tracking-wide">CINE-AI</span>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Revolutionizing movie discovery through the power of artificial intelligence. Find your next favorite film in seconds.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-8">
+            <div className="space-y-4">
+              <h4 className="text-sm font-semibold uppercase tracking-wider text-white">Platform</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li><a href="/" className="hover:text-primary transition-colors">Discover</a></li>
+                <li><a href="/favorites" className="hover:text-primary transition-colors">Favorites</a></li>
+                <li><a href="/history" className="hover:text-primary transition-colors">History</a></li>
+              </ul>
+            </div>
+            <div className="space-y-4">
+              <h4 className="text-sm font-semibold uppercase tracking-wider text-white">Legal</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li><a href="#" className="hover:text-primary transition-colors">Privacy</a></li>
+                <li><a href="#" className="hover:text-primary transition-colors">Terms</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h4 className="text-sm font-semibold uppercase tracking-wider text-white">Powered By</h4>
+            <div className="flex gap-4">
+              <div className="px-3 py-1 rounded bg-white/5 border border-white/10 text-xs font-medium">Gemini AI</div>
+              <div className="px-3 py-1 rounded bg-white/5 border border-white/10 text-xs font-medium">TMDB API</div>
+            </div>
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-white/5 text-center text-sm text-muted-foreground">
+          © 2026 CINE-AI. All rights reserved.
+        </div>
+      </footer>
     </div>
   );
 }
