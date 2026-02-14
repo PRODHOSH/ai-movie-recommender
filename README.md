@@ -15,8 +15,6 @@ An AI-powered movie recommender that understands your vibe. Tell us how you feel
 
 ### AI-Powered Discover
 ![Discover Page](./screenshots/discover.png)
-![Discover Page](./screenshots/discover_2.png)
-
 
 ### Your Favorites Collection
 ![Favorites Page](./screenshots/favorites.png)
