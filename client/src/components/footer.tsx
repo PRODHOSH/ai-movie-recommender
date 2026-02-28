@@ -21,11 +21,11 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <img src="/favicon.png" alt="CINE-AI" className="w-7 h-7" />
-              <span className="font-display font-bold text-xl tracking-wide text-primary">CINE-AI</span>
+              <img src="/favicon.png" alt="FlickMood" className="w-7 h-7" />
+              <span className="font-display font-bold text-xl tracking-wide text-primary">FlickMood</span>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
-              AI-powered movie discovery. Tell us your mood, we find your next favorite film.
+              FlickMood uses AI to recommend movies based on your mood.
             </p>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <Sparkles className="w-3.5 h-3.5 text-primary" />
@@ -87,7 +87,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="mt-10 pt-6 border-t border-white/8 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} CINE-AI. All rights reserved.
+            © {new Date().getFullYear()} FlickMood. All rights reserved.
           </p>
           <p className="text-xs text-muted-foreground">
             Made with <span className="text-red-500">♥</span> by{" "}

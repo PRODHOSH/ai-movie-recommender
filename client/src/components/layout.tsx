@@ -31,8 +31,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
       {/* Mobile Header */}
       <div className="md:hidden flex items-center justify-between p-4 bg-black border-b border-white/10 sticky top-0 z-50">
         <div className="flex items-center gap-2 text-primary">
-          <img src="/favicon.png" alt="CINE-AI" className="w-7 h-7" />
-          <span className="font-display font-bold text-lg tracking-wide">CINE-AI</span>
+          <img src="/favicon.png" alt="FlickMood" className="w-7 h-7" />
+          <span className="font-display font-bold text-lg tracking-wide">FlickMood</span>
         </div>
         <button onClick={() => logout()} className="p-2 text-muted-foreground hover:text-foreground">
           <LogOut className="w-5 h-5" />
@@ -43,8 +43,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <aside className="hidden md:flex flex-col w-64 fixed h-screen bg-black border-r border-white/10 z-40">
         <div className="p-8">
           <div className="flex items-center gap-3 text-primary mb-10">
-            <img src="/favicon.png" alt="CINE-AI" className="w-9 h-9" />
-            <span className="font-display font-bold text-2xl tracking-wide">CINE-AI</span>
+            <img src="/favicon.png" alt="FlickMood" className="w-9 h-9" />
+            <span className="font-display font-bold text-2xl tracking-wide">FlickMood</span>
           </div>
 
           <nav className="space-y-2">

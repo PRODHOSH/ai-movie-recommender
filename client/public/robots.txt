@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Disallow private/authenticated routes
+Disallow: /favorites
+Disallow: /watchlist
+Disallow: /history
+
+Sitemap: https://flickmood.netlify.app/sitemap.xml

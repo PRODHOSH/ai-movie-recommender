@@ -163,8 +163,8 @@ export default function LandingPage() {
       {/* Nav */}
       <nav className="flex items-center justify-between px-6 py-5 md:px-12 max-w-7xl mx-auto w-full border-b border-white/8">
         <div className="flex items-center gap-2 text-primary">
-          <img src="/favicon.png" alt="CINE-AI" className="w-9 h-9" />
-          <span className="font-display font-bold text-2xl tracking-wide">CINE-AI</span>
+          <img src="/favicon.png" alt="FlickMood" className="w-9 h-9" />
+          <span className="font-display font-bold text-2xl tracking-wide">FlickMood</span>
         </div>
         <div className="flex items-center gap-4">
           <button 
@@ -204,9 +204,9 @@ export default function LandingPage() {
 
             <div className="text-center mb-8">
               <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-primary/10 border border-primary/20 mb-4">
-                <img src="/favicon.png" alt="CINE-AI" className="w-8 h-8" />
+                <img src="/favicon.png" alt="FlickMood" className="w-8 h-8" />
               </div>
-              <h2 className="text-3xl font-bold mb-2">{isSignUp ? 'Join CINE-AI' : 'Welcome Back'}</h2>
+              <h2 className="text-3xl font-bold mb-2">{isSignUp ? 'Join FlickMood' : 'Welcome Back'}</h2>
               <p className="text-sm text-muted-foreground">
                 {isSignUp ? 'Create an account to start discovering' : 'Sign in to continue your journey'}
               </p>
