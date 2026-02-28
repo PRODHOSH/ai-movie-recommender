@@ -97,6 +97,50 @@ export function useRecommendations(mood?: string) {
   });
 }
 
+// Search Movies Hook
+export function useSearchMovies(query: string) {
+  return useQuery({
+    queryKey: ['search-movies', query],
+    queryFn: async () => {
+      const genres = await tmdbClient.getGenres();
+      const genreMap = new Map(genres.map(g => [g.id, g.name]));
+      const tmdbMovies = await tmdbClient.searchMovies(query);
+      return tmdbMovies.slice(0, 20).map(m => tmdbToMovie(m, genreMap));
+    },
+    enabled: query.length > 2,
+    staleTime: 1000 * 60 * 5,
+  });
+}
+
+// Movie Details Hook (trailer, cast with photos, director, runtime, similar)
+export function useMovieDetails(id: number | null) {
+  return useQuery({
+    queryKey: ['movie-details', id],
+    queryFn: async () => {
+      if (!id) return null;
+      const [details, credits, videos, similar] = await Promise.all([
+        tmdbClient.getMovieDetails(id),
+        tmdbClient.getMovieCredits(id),
+        tmdbClient.getMovieVideos(id),
+        tmdbClient.getSimilarMovies(id),
+      ]);
+      const genres = await tmdbClient.getGenres();
+      const genreMap = new Map(genres.map(g => [g.id, g.name]));
+      const director = credits.crew.find(c => c.job === 'Director')?.name ?? null;
+      const cast = credits.cast.slice(0, 8).map(c => ({
+        name: c.name,
+        character: c.character,
+        profilePath: c.profile_path,
+      }));
+      const trailer = videos.find(v => v.site === 'YouTube' && v.type === 'Trailer') ?? null;
+      const similarMovies = similar.slice(0, 6).map(m => tmdbToMovie(m, genreMap));
+      return { runtime: details.runtime, budget: details.budget, revenue: details.revenue, director, cast, trailer, similarMovies };
+    },
+    enabled: !!id,
+    staleTime: 1000 * 60 * 60,
+  });
+}
+
 // Trending Movies Hook
 export function useTrendingMovies() {
   return useQuery({
@@ -109,6 +153,34 @@ export function useTrendingMovies() {
       return tmdbMovies.slice(0, 10).map(m => tmdbToMovie(m, genreMap));
     },
     staleTime: 1000 * 60 * 30, // 30 minutes - trending doesn't change that fast
+  });
+}
+
+// Now Playing Hook
+export function useNowPlayingMovies() {
+  return useQuery({
+    queryKey: ['now-playing'],
+    queryFn: async () => {
+      const genres = await tmdbClient.getGenres();
+      const genreMap = new Map(genres.map(g => [g.id, g.name]));
+      const tmdbMovies = await tmdbClient.getNowPlayingMovies();
+      return tmdbMovies.slice(0, 12).map(m => tmdbToMovie(m, genreMap));
+    },
+    staleTime: 1000 * 60 * 60,
+  });
+}
+
+// Top Rated Hook
+export function useTopRatedMovies() {
+  return useQuery({
+    queryKey: ['top-rated'],
+    queryFn: async () => {
+      const genres = await tmdbClient.getGenres();
+      const genreMap = new Map(genres.map(g => [g.id, g.name]));
+      const tmdbMovies = await tmdbClient.getTopRatedMovies();
+      return tmdbMovies.slice(0, 12).map(m => tmdbToMovie(m, genreMap));
+    },
+    staleTime: 1000 * 60 * 60,
   });
 }
 
@@ -234,5 +306,80 @@ export function useHistory() {
       }));
     },
     enabled: !!user,
+  });
+}
+// Watchlist interface
+export interface WatchlistItem {
+  id: string;
+  userId: string;
+  movieId: number;
+  movie: Movie;
+  createdAt: string;
+}
+
+export function useWatchlist() {
+  const { user } = useAuth();
+  return useQuery({
+    queryKey: ['watchlist', user?.id],
+    queryFn: async () => {
+      if (!user) return [];
+      const { data, error } = await supabase
+        .from('watchlist')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      return (data || []).map(item => ({
+        id: item.id,
+        userId: item.user_id,
+        movieId: item.movie_id,
+        movie: item.movie_data as Movie,
+        createdAt: item.created_at,
+      })) as WatchlistItem[];
+    },
+    enabled: !!user,
+  });
+}
+
+export function useAddToWatchlist() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  const { user } = useAuth();
+  return useMutation({
+    mutationFn: async (movie: Movie) => {
+      if (!user) throw new Error('Must be logged in');
+      const { data, error } = await supabase
+        .from('watchlist')
+        .insert({ user_id: user.id, movie_id: movie.tmdbId, movie_data: movie })
+        .select()
+        .single();
+      if (error) {
+        if (error.code === '23505') throw new Error('Already in watchlist');
+        throw error;
+      }
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['watchlist'] });
+      toast({ title: 'Added to Watchlist', description: 'Movie saved to your watchlist.' });
+    },
+    onError: (error: Error) => {
+      toast({ title: 'Error', description: error.message, variant: 'destructive' });
+    },
+  });
+}
+
+export function useRemoveFromWatchlist() {
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+  return useMutation({
+    mutationFn: async (watchlistId: string) => {
+      const { error } = await supabase.from('watchlist').delete().eq('id', watchlistId);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['watchlist'] });
+      toast({ title: 'Removed', description: 'Movie removed from watchlist.' });
+    },
   });
 }

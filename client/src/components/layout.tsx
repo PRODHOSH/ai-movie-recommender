@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { Film, Heart, History, LogOut, Sparkles, MessageSquare } from "lucide-react";
+import { Heart, History, LogOut, Sparkles, MessageSquare, Bookmark } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 import { Footer } from "@/components/footer";
@@ -11,6 +11,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const navItems = [
     { href: "/", label: "Discover", icon: Sparkles },
     { href: "/favorites", label: "Favorites", icon: Heart },
+    { href: "/watchlist", label: "Watchlist", icon: Bookmark },
     { href: "/history", label: "History", icon: History },
     { href: "/contact", label: "Contact", icon: MessageSquare },
   ];

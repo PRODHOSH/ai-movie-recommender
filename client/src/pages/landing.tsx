@@ -1,4 +1,4 @@
-import { Sparkles, ArrowRight, TrendingUp } from "lucide-react";
+import { Sparkles, ArrowRight, TrendingUp, Brain, Bookmark, Search, Star, Play, Users, Film, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
 import { supabase } from "@/lib/supabase";
@@ -142,20 +142,26 @@ export default function LandingPage() {
     return null;
   }
 
+  const FEATURES = [
+    { icon: Brain, title: "AI Mood Matching", desc: "Type how you feel and our AI finds movies that match your exact vibe right now." },
+    { icon: Star, title: "TMDB Powered", desc: "Access millions of movies with real ratings, trailers, and cast information." },
+    { icon: Bookmark, title: "Personal Watchlist", desc: "Save movies to your watchlist and never lose track of what you want to watch." },
+    { icon: Search, title: "Smart Search", desc: "Search any title, filter by genre, year, or rating to find exactly what you want." },
+    { icon: Film, title: "Trailers & Cast", desc: "Watch trailers and explore full cast details without leaving the app." },
+    { icon: Zap, title: "Instant Results", desc: "Get personalized recommendations in seconds, not minutes." },
+  ];
+
+  const STEPS = [
+    { num: "01", title: "Tell Us Your Mood", desc: "Type in how you're feeling — 'something scary', 'feel-good comedy', or 'mind-bending thriller'" },
+    { num: "02", title: "AI Does The Work", desc: "Gemini AI analyzes your mood and picks the best matching genres and films from TMDB" },
+    { num: "03", title: "Watch & Save", desc: "Browse recommendations, watch trailers, and save favorites to your personal watchlist" },
+  ];
+
   return (
-    <div className="min-h-screen text-foreground relative overflow-hidden flex flex-col" style={{ background: '#000000' }}>
-      {/* Animated Background */}
-      <div className="fixed inset-0 z-0 w-full h-full overflow-hidden">
-        <div className="absolute inset-0 bg-black" />
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-[10%] left-[20%] w-[600px] h-[600px] bg-purple-600/40 rounded-full blur-[120px] animate-pulse" />
-          <div className="absolute top-[40%] right-[15%] w-[500px] h-[500px] bg-blue-600/30 rounded-full blur-[100px] animate-pulse" style={{animationDelay: '2s'}} />
-          <div className="absolute bottom-[20%] left-[40%] w-[400px] h-[400px] bg-pink-600/30 rounded-full blur-[80px] animate-pulse" style={{animationDelay: '4s'}} />
-        </div>
-      </div>
+    <div className="min-h-screen text-foreground flex flex-col" style={{ background: '#000000' }}>
 
       {/* Nav */}
-      <nav className="relative z-10 flex items-center justify-between px-6 py-6 md:px-12 max-w-7xl mx-auto w-full bg-black border-b border-white/10">
+      <nav className="flex items-center justify-between px-6 py-5 md:px-12 max-w-7xl mx-auto w-full border-b border-white/8">
         <div className="flex items-center gap-2 text-primary">
           <img src="/favicon.png" alt="CINE-AI" className="w-9 h-9" />
           <span className="font-display font-bold text-2xl tracking-wide">CINE-AI</span>
@@ -376,7 +382,7 @@ export default function LandingPage() {
       )}
 
       {/* Hero */}
-      <main className="relative z-10 flex flex-col items-center justify-center flex-1 px-6 md:px-12 max-w-7xl mx-auto pt-8 pb-12 md:pt-12 md:pb-16 w-full">
+      <main className="flex flex-col items-center justify-center flex-1 px-6 md:px-12 max-w-7xl mx-auto pt-8 pb-12 md:pt-12 md:pb-16 w-full">
         <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center w-full">
           {/* Left: Hero Content */}
           <motion.div
@@ -392,9 +398,7 @@ export default function LandingPage() {
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display font-bold tracking-tight leading-[1.15]">
               <span className="block text-white mb-2">Discover Movies</span>
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-400 to-blue-500">
-                That Match Your Mood
-              </span>
+              <span className="block text-primary">That Match Your Mood</span>
             </h1>
 
             <p className="text-base md:text-lg text-gray-300 max-w-xl leading-relaxed">
@@ -489,26 +493,125 @@ export default function LandingPage() {
         </div>
       </main>
 
+      {/* ── Stats Bar ── */}
+      <section className="border-y border-white/8 py-8">
+        <div className="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          {[
+            { value: "1M+", label: "Movies & Shows" },
+            { value: "AI", label: "Mood Engine" },
+            { value: "100%", label: "Free to Use" },
+            { value: "4K+", label: "Trailers" },
+          ].map((s) => (
+            <motion.div
+              key={s.label}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="space-y-1"
+            >
+              <p className="text-3xl font-display font-bold text-primary">{s.value}</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-widest">{s.label}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Features Grid ── */}
+      <section className="py-20 px-6 max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-14"
+        >
+          <p className="text-xs text-primary font-semibold uppercase tracking-widest mb-3">Everything You Need</p>
+          <h2 className="text-3xl md:text-4xl font-display font-bold text-white">Built for Movie Lovers</h2>
+        </motion.div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {FEATURES.map((f, i) => (
+            <motion.div
+              key={f.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.07 }}
+              className="p-6 rounded-2xl bg-white/3 border border-white/8 hover:border-primary/30 hover:bg-white/5 transition-all group"
+            >
+              <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                <f.icon className="w-5 h-5 text-primary" />
+              </div>
+              <h3 className="font-semibold text-white mb-2">{f.title}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── How It Works ── */}
+      <section className="py-20 px-6 border-t border-white/8">
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-14"
+          >
+            <p className="text-xs text-primary font-semibold uppercase tracking-widest mb-3">Simple Process</p>
+            <h2 className="text-3xl md:text-4xl font-display font-bold text-white">How It Works</h2>
+          </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {STEPS.map((step, i) => (
+              <motion.div
+                key={step.num}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="relative"
+              >
+                {i < STEPS.length - 1 && (
+                  <div className="hidden md:block absolute top-8 left-full w-full h-px border-t border-dashed border-white/15 z-0" style={{ width: 'calc(100% - 40px)', left: '70%' }} />
+                )}
+                <span className="text-5xl font-display font-black text-white/8 block mb-4">{step.num}</span>
+                <h3 className="text-lg font-bold text-white mb-2">{step.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{step.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA Banner ── */}
+      <section className="py-16 px-6 border-t border-white/8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="max-w-3xl mx-auto text-center space-y-6"
+        >
+          <h2 className="text-3xl md:text-5xl font-display font-bold text-white">Ready to Find Your Next Favorite?</h2>
+          <p className="text-muted-foreground">Join thousands of movie lovers who let AI find their perfect watch.</p>
+          <button
+            onClick={() => { setShowAuth(true); setIsSignUp(true); }}
+            className="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-primary hover:bg-primary/90 text-white font-semibold text-base transition-all hover:scale-105"
+          >
+            <Play className="w-5 h-5 fill-white" /> Start Watching Free
+          </button>
+        </motion.div>
+      </section>
+
       {/* Trending Movies Carousel */}
-      <section className="relative py-20 overflow-hidden">
-        <div className="relative max-w-7xl mx-auto px-4 md:px-8">
+      <section className="py-20 overflow-hidden border-t border-white/8">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mb-12 text-center bg-black/30 backdrop-blur-md rounded-3xl p-8 border border-white/10 max-w-3xl mx-auto"
+            className="mb-10 flex items-center gap-3"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-sm font-medium mb-4">
-              <TrendingUp className="w-4 h-4" />
-              <span>Trending Now</span>
-            </div>
-            <h2 className="text-3xl md:text-5xl font-display font-bold tracking-tight mb-3">
-              What's Hot This Week
-            </h2>
-            <p className="text-muted-foreground text-lg">
-              Discover what everyone's watching right now
-            </p>
+            <TrendingUp className="w-5 h-5 text-primary" />
+            <h2 className="text-2xl md:text-3xl font-display font-bold text-white">Trending This Week</h2>
           </motion.div>
 
           {trendingLoading ? (
@@ -547,9 +650,8 @@ export default function LandingPage() {
                 ))}
               </div>
               
-              {/* Gradient overlays */}
-              <div className="absolute left-0 top-0 bottom-0 w-40 bg-gradient-to-r from-black via-black/80 to-transparent pointer-events-none z-10" />
-              <div className="absolute right-0 top-0 bottom-0 w-40 bg-gradient-to-l from-black via-black/80 to-transparent pointer-events-none z-10" />
+              <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-black to-transparent pointer-events-none z-10" />
+              <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-black to-transparent pointer-events-none z-10" />
             </div>
           )}
         </div>

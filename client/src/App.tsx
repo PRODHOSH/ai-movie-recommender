@@ -11,6 +11,7 @@ import HomePage from "@/pages/home";
 import FavoritesPage from "@/pages/favorites";
 import HistoryPage from "@/pages/history";
 import ContactPage from "@/pages/contact";
+import WatchlistPage from "@/pages/watchlist";
 import LandingPage from "@/pages/landing";
 import NotFound from "@/pages/not-found";
 
@@ -41,6 +42,7 @@ function Router() {
     <Switch>
       <Route path="/" component={() => <PrivateRoute component={HomePage} />} />
       <Route path="/favorites" component={() => <PrivateRoute component={FavoritesPage} />} />
+      <Route path="/watchlist" component={() => <PrivateRoute component={WatchlistPage} />} />
       <Route path="/history" component={() => <PrivateRoute component={HistoryPage} />} />
       <Route path="/contact" component={() => <PrivateRoute component={ContactPage} />} />
       <Route path="/auth" component={LandingPage} />
