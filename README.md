@@ -1,4 +1,4 @@
-# 🎬 CINE-AI
+# 🎬 FLICK-MOOD
 
 > **Your mood, our AI, perfect movies.**
 
